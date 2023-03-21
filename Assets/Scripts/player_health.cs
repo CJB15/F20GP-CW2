@@ -7,7 +7,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
     public int player_max_health = 6; // Players Max health
     public int player_current_health = 0; // Players current health, set below so alright to leav at 0
 
-    public bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
+    bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
     public int iFrameLength = 2; // The seconds the player is immortal for after taking damage
 
     public bool GodMode = false; // Used for debugging, makes player unable to take damage
