@@ -41,6 +41,27 @@ public class player_health : MonoBehaviour // This script holds the players heal
         
     }
 
+    public bool playerHeal(int healAmount)
+    {
+        if (player_current_health < player_max_health)
+        {
+            player_current_health = player_current_health + healAmount;
+
+            if(player_current_health > player_max_health)
+            {
+                player_current_health = player_max_health;
+            }
+
+            hpcounter.updateHealthCount(player_current_health, player_max_health);
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void playerDamage(int damage, string direction) // Can be called to make player take any amount of damage
     {
         if(!InvulnerabilityFrames && !GodMode && !isDead) // If not invulnerable, god mode or already dead, take damage
