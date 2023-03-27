@@ -47,24 +47,24 @@ public class player_health : MonoBehaviour // This script holds the players heal
 
     }
 
-    public bool playerHeal(int healAmount)
+    public bool playerHeal(int healAmount) // Can be called to heal the player by any amount
     {
-        if (player_current_health < player_max_health)
+        if (player_current_health < player_max_health) // If player is not at full health
         {
-            player_current_health = player_current_health + healAmount;
+            player_current_health = player_current_health + healAmount; // Add the heal amount to the players health
 
-            if(player_current_health > player_max_health)
+            if(player_current_health > player_max_health) // If this put the player over their max health
             {
-                player_current_health = player_max_health;
+                player_current_health = player_max_health; // Set them to max health
             }
 
-            hpcounter.updateHealthCount(player_current_health, player_max_health);
-
-            return true;
+            hpcounter.updateHealthCount(player_current_health, player_max_health); // Calls function in health_counter, sets the health display to show current health 
+            PlayerPrefs.SetInt("player_current_health", player_current_health); // Updates the saved health value
+            return true; // Returns true to indicate they were healed
         }
         else
         {
-            return false;
+            return false; // Return false to indicate the player wasn't healed
         }
     }
 
@@ -83,10 +83,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
 
             if(player_current_health <= 0) // If player has no health
             {
-                isDead = true; // Set them as dead
-                playermove.setDead(); // Calls function in player_movment, stops them moving
-                playergem.setGem(0); // Sets gemcount to 0
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // TODO: Send the user back to the menu, make this happen after a few second delay
+                StartCoroutine(playerDead());
             }
             else // If they do have health
             {
@@ -110,5 +107,14 @@ public class player_health : MonoBehaviour // This script holds the players heal
             yield return new WaitForSeconds(0.125f);
         }
         InvulnerabilityFrames = false; // Set the flag to false
+    }
+
+    IEnumerator playerDead()
+    {
+        isDead = true; // Set them as dead
+        playermove.setDead(); // Calls function in player_movment, stops them moving
+        yield return new WaitForSeconds(3);
+        playergem.setGem(0); // Sets gemcount to 0
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Send the user back to the menu
     }
 }

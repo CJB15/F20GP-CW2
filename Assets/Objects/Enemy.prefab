@@ -175,6 +175,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa525549d3733c541a7cc7922641b9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ColliderEnemy1: {fileID: 3567238369422945281}
+  ColliderEnemy2: {fileID: 3567238369422945283}
+  bodyEnemy: {fileID: 3567238369422945310}
   enemyDamage: 1
   yKnockback: 4
   yCoordHeadStop: 0.5
