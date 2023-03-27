@@ -19,7 +19,7 @@ public class main_menu : MonoBehaviour
 
     public void QuitGame()
     {
-        //TODO implemnt quit button
+        Application.Quit();
     }
 
     public void GodMode(bool status) // TODO dose not work, set manually in inspector

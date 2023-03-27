@@ -1550,6 +1550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729b162ea0b77a84189deceddb1bbd21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu_width: 500
 --- !u!1001 &1979165421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1675,6 +1676,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1587400289}
     m_Modifications:
+    - target: {fileID: 6067163704778226631, guid: f4a49d88c9d168b4d9b7997c15260693, type: 3}
+      propertyPath: m_Text
+      value: God Mode*   *TODO
+      objectReference: {fileID: 0}
+    - target: {fileID: 6067163705700356752, guid: f4a49d88c9d168b4d9b7997c15260693, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6067163705700356752, guid: f4a49d88c9d168b4d9b7997c15260693, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6067163705700356755, guid: f4a49d88c9d168b4d9b7997c15260693, type: 3}
+      propertyPath: m_Text
+      value: Demi-God Mode*
+      objectReference: {fileID: 0}
     - target: {fileID: 6067163706493899060, guid: f4a49d88c9d168b4d9b7997c15260693, type: 3}
       propertyPath: m_Name
       value: Main Menu
