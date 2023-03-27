@@ -5,7 +5,7 @@ using UnityEngine;
 public class player_health : MonoBehaviour // This script holds the players health and function to reduce it
 {
     public int player_max_health = 6; // Players Max health
-    public int player_current_health = 0; // Players current health, set below so alright to leav at 0
+    public int player_current_health; // Players current health
 
     bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
     public int iFrameLength = 2; // The seconds the player is immortal for after taking damage
@@ -18,6 +18,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
 
     public health_counter hpcounter; // Used to call function in health_counter
     public player_movment playermove; // Used to call function in player_movment
+    public player_collectable playergem;
     public Renderer rend; // Used to disable the rederer later
 
     bool isDead = false;
@@ -25,20 +26,25 @@ public class player_health : MonoBehaviour // This script holds the players heal
     // Start is called before the first frame update
     void Start()
     {
-        player_current_health = player_max_health; // Set players health to max
-
+        player_current_health = PlayerPrefs.GetInt("player_current_health");
+        if(player_current_health <= 0)
+        {
+            player_current_health = player_max_health; // Set players health to max
+        }
+        
         hpcounter = GameObject.FindGameObjectWithTag("Health UI").GetComponent<health_counter>(); // Used to call function in player_movment
         hpcounter.updateHealthCount(player_current_health, player_max_health); // Calls function in health_counter, sets the health display to show current health
     
         rend = GetComponent<Renderer>();
 
         playermove = GameObject.FindGameObjectWithTag("Player").GetComponent<player_movment>(); // Used to call function in health_counter
+        playergem = GameObject.FindGameObjectWithTag("Player").GetComponent<player_collectable>(); // Used to call function in health_counter
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        
+
     }
 
     public bool playerHeal(int healAmount)
@@ -74,18 +80,21 @@ public class player_health : MonoBehaviour // This script holds the players heal
             {
                 player_current_health = player_current_health - damage; // Reduce player health by damage
             }
-            hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
 
             if(player_current_health <= 0) // If player has no health
             {
                 isDead = true; // Set them as dead
                 playermove.setDead(); // Calls function in player_movment, stops them moving
-                // TODO add more here
+                playergem.setGem(0);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
             }
             else
             {
                 StartCoroutine(iFrames()); // Give the player invulnerability frames
             }
+
+            hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
+            PlayerPrefs.SetInt("player_current_health", player_current_health);
             playermove.playerHurtKnockBack(xKnockback, yKnockback, direction); // Knock the play backwards
         } // If invulenrable, godmode or dead do not take damage
     }

@@ -7,6 +7,8 @@ public class player_movment : MonoBehaviour // This script is related too player
     public float player_speed = 4; // Player run speed
     public float player_jump_height = 6; // Player jump height
 
+    public bool player_static = false; // Makes player unable to move, used in main menu
+
     private Animator thisAnim; // The animator the changes the animations
 
     CapsuleCollider2D ColliderPlayer;
@@ -33,7 +35,7 @@ public class player_movment : MonoBehaviour // This script is related too player
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(!isStunned && !isDead)
+        if(!isStunned && !isDead && !player_static)
         {
             float inputX = Input.GetAxis("Horizontal"); // Gets users left or right input
             float inputY = Input.GetAxis("Vertical"); // Gets users up or down input
@@ -91,6 +93,11 @@ public class player_movment : MonoBehaviour // This script is related too player
             {
                 thisAnim.SetBool("Crouching", false); // Tell animator to not use crouching animation
             } // Note: this dose nothing gameplay-wise it's just to use one of teh animations
+
+            if (Input.GetKey("escape"))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+            }
         }
     }
 
