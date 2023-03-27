@@ -3,4 +3,4 @@ F20GP CW2
 
 .getignore ensures only relevent files are pushed, simply opening this file will cause unity to generate the rest of the files.
 
-After opening in unity load the 'Sample Scene' to view a test enviroment of each feature/mechanic.
+After opening in unity load the 'Main Menu' and select the 'Test Scenario' to view a test enviroment of each feature/mechanic.
