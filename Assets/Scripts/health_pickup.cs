@@ -37,7 +37,7 @@ public class health_pickup : MonoBehaviour // This script is the functions for t
 
     IEnumerator cherryCollected()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.333f);
         Destroy(gameObject); // Destroy the gem
     }
 }

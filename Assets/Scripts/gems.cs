@@ -33,7 +33,7 @@ public class gems : MonoBehaviour // This script is the functions for teh collec
 
     IEnumerator gemCollected()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.333f);
         Destroy(gameObject); // Destroy the gem
     }
 }
