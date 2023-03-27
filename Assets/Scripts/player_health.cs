@@ -26,8 +26,8 @@ public class player_health : MonoBehaviour // This script holds the players heal
     // Start is called before the first frame update
     void Start()
     {
-        player_current_health = PlayerPrefs.GetInt("player_current_health");
-        if(player_current_health <= 0)
+        player_current_health = PlayerPrefs.GetInt("player_current_health"); // Sets their health to the saved value
+        if(player_current_health <= 0) // If the saved value is 0 the set to max
         {
             player_current_health = player_max_health; // Set players health to max
         }
@@ -85,16 +85,16 @@ public class player_health : MonoBehaviour // This script holds the players heal
             {
                 isDead = true; // Set them as dead
                 playermove.setDead(); // Calls function in player_movment, stops them moving
-                playergem.setGem(0);
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+                playergem.setGem(0); // Sets gemcount to 0
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // TODO: Send the user back to the menu, make this happen after a few second delay
             }
-            else
+            else // If they do have health
             {
                 StartCoroutine(iFrames()); // Give the player invulnerability frames
             }
 
             hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
-            PlayerPrefs.SetInt("player_current_health", player_current_health);
+            PlayerPrefs.SetInt("player_current_health", player_current_health); // Updates the saved health value
             playermove.playerHurtKnockBack(xKnockback, yKnockback, direction); // Knock the play backwards
         } // If invulenrable, godmode or dead do not take damage
     }

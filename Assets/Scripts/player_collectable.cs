@@ -11,7 +11,7 @@ public class player_collectable : MonoBehaviour // This script is holds call teh
     // Start is called before the first frame update
     void Start()
     {
-        gem_count = PlayerPrefs.GetInt("gem_count");
+        gem_count = PlayerPrefs.GetInt("gem_count"); // Sets the gem count to the saved amount
 
         counter = GameObject.FindGameObjectWithTag("Gem UI").GetComponent<gem_counter>(); // Used to call function in gem_counter
         counter.updateGemCount(gem_count); // Calls function in gem_counter, sets the gem count display to show current gem count
@@ -23,15 +23,15 @@ public class player_collectable : MonoBehaviour // This script is holds call teh
         
         counter.updateGemCount(gem_count); // Calls function in gem_counter, sets the gem count display to show current gem count
         
-        PlayerPrefs.SetInt("gem_count", gem_count);
+        PlayerPrefs.SetInt("gem_count", gem_count); // Updates the saved amount
     }
 
-    public void setGem(int amount)
+    public void setGem(int amount) // Can be called to set the players gem count to any amount
     {
-        gem_count = amount;
+        gem_count = amount; // Sets the gem amount
 
         counter.updateGemCount(gem_count); // Calls function in gem_counter, sets the gem count display to show current gem count
         
-        PlayerPrefs.SetInt("gem_count", gem_count);
+        PlayerPrefs.SetInt("gem_count", gem_count); // Updates the saved amount
     }
 }

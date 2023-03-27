@@ -12,14 +12,14 @@ public class main_menu : MonoBehaviour
 
     }
 
-    public void PlayLevel(int LevelNo)
+    public void PlayLevel(int LevelNo) // Is called by the level buttons, parses an int to indicate which button
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene"); // Loads the level, TODO: currently just loads SampleScene, change when more levels are made
     }
 
     public void QuitGame()
     {
-        //Application.Quit();
+        //TODO implemnt quit button
     }
 
     public void GodMode(bool status) // TODO dose not work, set manually in inspector
