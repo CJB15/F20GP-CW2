@@ -7,8 +7,8 @@ public class enemy : MonoBehaviour
     player_health playerhp; // Used to call function in player_health
     player_movment playermove; // Used to call function in player_movment
 
-    CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
-    Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
+    public CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
+    public Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
 
     public int enemyDamage = 1; //  Damage the enemy dose to the player
     
@@ -19,13 +19,13 @@ public class enemy : MonoBehaviour
     public float patrolTime = 2; // How long each phase of the patrol cycle lasts for
     public float enemyWalkSpeed = 2; // How fast the enemy moves
 
-    private Animator thisAnim; // Holds the enemies animator
+    public Animator thisAnim; // Holds the enemies animator
 
     int patrolStage = 0; // Stage of the patrol cycle
 
     public GameObject GemObject; // Creates a new gameobject, used to create a gem
 
-    bool isDead = false;
+    public bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +98,7 @@ public class enemy : MonoBehaviour
                 playerhp.playerDamage(enemyDamage, "Right"); // Hurt player, push left
             }
         }
+        
     }
 
     void patrolCycle()
@@ -120,7 +121,7 @@ public class enemy : MonoBehaviour
         }
     }
 
-    IEnumerator enemyDead()
+    public IEnumerator enemyDead()
     {
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject); // Kill enemy
