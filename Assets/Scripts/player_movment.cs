@@ -33,6 +33,11 @@ public class player_movment : MonoBehaviour // This script is related too player
     bool isOnNormalGrav = false;
     bool gravityIsInverted = false;
 
+    public bool doubleJumpAbility = false;
+    bool canDoubleJump = false;
+
+    bool holdingJump = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -83,10 +88,14 @@ public class player_movment : MonoBehaviour // This script is related too player
             
             bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
             thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
-            //if(isGrounded){Debug.Log("ground");}
+            
+            if(isGrounded && doubleJumpAbility)
+            {
+                canDoubleJump = true;
+            }
+
             if((BodyPlayer.velocity.y < 0.001 && !gravityIsInverted) || (BodyPlayer.velocity.y > 0.01 && gravityIsInverted)) // If player dosn't have positive verical velocity then they're jump has ended
             {
-                //Debug.Log("stop");
                 thisAnim.SetBool("Jumping", false); // Tell animator to not use jumping animaton
                 isJumping = false; // Flag that the jump has ended
             }
@@ -98,6 +107,7 @@ public class player_movment : MonoBehaviour // This script is related too player
                 {
                     thisAnim.SetBool("Jumping", true); // Tell the animator to use the jumping animation
                     isJumping = true; // Flag that the player is jumping
+                    holdingJump = true;
                     if (gravityIsInverted)
                     {
                         Vector2 temp = BodyPlayer.velocity;
@@ -130,12 +140,36 @@ public class player_movment : MonoBehaviour // This script is related too player
                 }
                 
             }
+            else if(Input.GetButton("Jump") && !isGrounded && !isJumping && canDoubleJump && !holdingJump) // Double jump
+            {
+                canDoubleJump = false;
+                isJumping = true;
+                thisAnim.SetBool("Jumping", true);
+                
+                if (gravityIsInverted)
+                {
+                    Vector2 temp = BodyPlayer.velocity;
+                    temp.y = -player_jump_height;
+                    BodyPlayer.velocity = temp;
+                }
+                else
+                {
+                    Vector2 temp = BodyPlayer.velocity;
+                    temp.y = player_jump_height;
+                    BodyPlayer.velocity = temp;
+                }
+            }
             else if(!Input.GetButton("Jump") && isJumping) // If user releases the jump button while still traveing upwards
             {
                 Vector2 temp = BodyPlayer.velocity;
                 temp.y = 0;
                 BodyPlayer.velocity = temp; // Stop jump immediatly by setting y velocity to 0
                 isJumping = false; // Is no longer jumping
+                holdingJump = false;
+            }
+            else if(!Input.GetButton("Jump"))
+            {
+                holdingJump = false;
             }
 
 
