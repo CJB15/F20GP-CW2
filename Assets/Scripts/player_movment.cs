@@ -9,18 +9,17 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     public bool player_static = false; // Makes player unable to move, used in main menu
 
-    private Animator thisAnim; // The animator the changes the animations
+    Animator thisAnim; // Holds the animator the changes the animations
 
-    CapsuleCollider2D ColliderPlayer;
-    Rigidbody2D BodyPlayer;
-    SpriteRenderer SpritePlayer;
+    CapsuleCollider2D ColliderPlayer; // Holds the players collider
+    Rigidbody2D BodyPlayer; // Holds players rigib body
+    SpriteRenderer SpritePlayer; // Holds players sprite
 
-    public player_camera movingCamera;
+    public player_camera movingCamera; // Holds the camera that follows the player, needs to be set in the inspector
 
-    RaycastHit2D hit;
-
-    int layerMaskGround;
-    float heightTestPlayer;
+    RaycastHit2D hit; // Holds what, if anything, the raycast hit
+    int layerMaskGround; // Holds the layer that the raycst will check for
+    float heightTestPlayer; // Holds length of raycast
 
     bool isJumping = false; // Boolean that hold is player just jumped
 
@@ -29,14 +28,14 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     bool isDead = false; // Is player Dead
 
-    bool isOnAntiGrav = false;
-    bool isOnNormalGrav = false;
-    bool gravityIsInverted = false;
+    bool isOnAntiGrav = false; // Is the player on the anti gravity pad
+    bool isOnNormalGrav = false; // Is the player on the normal gravity pad
+    bool gravityIsInverted = false; // Is the player's gravity current inverted
 
-    public bool doubleJumpAbility = false;
-    bool canDoubleJump = false;
+    public bool doubleJumpAbility = false; // Dose the user have the double jump ability, make true when they have the ability
+    bool canDoubleJump = false; // Can the user current double jump
 
-    bool holdingJump = false;
+    bool holdingJump = false; // Is the user still holding the jump button after first jumping, this stops the double jump activating without pressing the button again
 
     // Start is called before the first frame update
     void Start()
@@ -47,8 +46,8 @@ public class player_movment : MonoBehaviour // This script is related too player
         BodyPlayer = GetComponent<Rigidbody2D>(); // Gets players rigib body
         SpritePlayer = GetComponent<SpriteRenderer>(); // Gets players sprite
 
-        heightTestPlayer = ColliderPlayer.bounds.extents.y + 0.05f; //  Gets ...used in ray cast later on
-        layerMaskGround = LayerMask.GetMask("Ground"); //  Ground objects are in teh "Ground" layer
+        heightTestPlayer = ColliderPlayer.bounds.extents.y + 0.05f; // Gets the length of the raycast
+        layerMaskGround = LayerMask.GetMask("Ground"); //  Ground objects are in the "Ground" layer, raycast looks for this
     }
 
     // Update is called once per frame
@@ -79,11 +78,11 @@ public class player_movment : MonoBehaviour // This script is related too player
             
             if(gravityIsInverted)
             {
-                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.up, heightTestPlayer, layerMaskGround); // Create a raycast pointing down
+                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.up, heightTestPlayer, layerMaskGround); // Create a raycast pointing up if gravity is inverted
             }
             else
             {
-                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down
+                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down if gravity is normal
             }
             
             bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
@@ -91,11 +90,10 @@ public class player_movment : MonoBehaviour // This script is related too player
             
             if(isGrounded && doubleJumpAbility)
             {
-                canDoubleJump = true;
+                canDoubleJump = true; // If the player is on the ground and has the double jump ability re-enable the ability
             }
 
-            if((BodyPlayer.velocity.y < 0.001 && !gravityIsInverted) || (BodyPlayer.velocity.y > 0.01 && gravityIsInverted)) // If player dosn't have positive verical velocity then they're jump has ended
-            {
+            if((BodyPlayer.velocity.y < 0.001 && !gravityIsInverted) || (BodyPlayer.velocity.y > 0.01 && gravityIsInverted)) // If player isn't moving away from the point they jumped away from
                 thisAnim.SetBool("Jumping", false); // Tell animator to not use jumping animaton
                 isJumping = false; // Flag that the jump has ended
             }
@@ -107,56 +105,56 @@ public class player_movment : MonoBehaviour // This script is related too player
                 {
                     thisAnim.SetBool("Jumping", true); // Tell the animator to use the jumping animation
                     isJumping = true; // Flag that the player is jumping
-                    holdingJump = true;
+                    holdingJump = true; // Flag that the user is currenlt holding the jump button
                     if (gravityIsInverted)
                     {
                         Vector2 temp = BodyPlayer.velocity;
                         temp.y = -player_jump_height;
-                        BodyPlayer.velocity = temp;
+                        BodyPlayer.velocity = temp; // If gravity is inverted, set players y velocity to their jump height but negative
 
-                        if(isOnNormalGrav)
+                        if(isOnNormalGrav) // If they are on a normal gravity pad then set gravity to normal and flip player
                         {
-                            BodyPlayer.gravityScale = 1;
-                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World);
-                            gravityIsInverted = false;
-                            movingCamera.cameraGravitySwitch();
+                            BodyPlayer.gravityScale = 1; // set gravity to normal
+                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World); // flip player
+                            gravityIsInverted = false; // flag that gravity is not inverted
+                            movingCamera.cameraGravitySwitch(); // Flip camera position on the y axis
                         }
                     }
                     else if (!gravityIsInverted)
                     {
                         Vector2 temp = BodyPlayer.velocity;
                         temp.y = player_jump_height;
-                        BodyPlayer.velocity = temp;
+                        BodyPlayer.velocity = temp; // If gravity is not inverted, set players y velocity to their jump height
 
-                        if(isOnAntiGrav)
+                        if(isOnAntiGrav) // If they are on a normal gravity pad then set gravity to normal and flip player
                         {
-                            BodyPlayer.gravityScale = -1;
-                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World);
-                            gravityIsInverted = true;
-                            movingCamera.cameraGravitySwitch();
+                            BodyPlayer.gravityScale = -1; // invert gravity
+                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World); // flip player
+                            gravityIsInverted = true; // flag that gravity is inverted
+                            movingCamera.cameraGravitySwitch(); // Flip camera position on the y axis
                         }
                     }
                     // TODO add jumping sound effect
                 }
                 
             }
-            else if(Input.GetButton("Jump") && !isGrounded && !isJumping && canDoubleJump && !holdingJump) // Double jump
+            else if(Input.GetButton("Jump") && !isGrounded && !isJumping && canDoubleJump && !holdingJump) // If the player has jumped, can double jump but is not holding the jumbutton but has pressed the button again
             {
-                canDoubleJump = false;
-                isJumping = true;
-                thisAnim.SetBool("Jumping", true);
+                canDoubleJump = false; // Set the player to not be able to double jump
+                isJumping = true; // Sets the player to be jumping again
+                thisAnim.SetBool("Jumping", true); // Play jumping anaimation
                 
                 if (gravityIsInverted)
                 {
                     Vector2 temp = BodyPlayer.velocity;
                     temp.y = -player_jump_height;
-                    BodyPlayer.velocity = temp;
+                    BodyPlayer.velocity = temp; // If gravity is inverted, set players y velocity to their jump height but negative
                 }
                 else
                 {
                     Vector2 temp = BodyPlayer.velocity;
                     temp.y = player_jump_height;
-                    BodyPlayer.velocity = temp;
+                    BodyPlayer.velocity = temp; // If gravity is not inverted, set players y velocity to their jump height
                 }
             }
             else if(!Input.GetButton("Jump") && isJumping) // If user releases the jump button while still traveing upwards
@@ -165,11 +163,11 @@ public class player_movment : MonoBehaviour // This script is related too player
                 temp.y = 0;
                 BodyPlayer.velocity = temp; // Stop jump immediatly by setting y velocity to 0
                 isJumping = false; // Is no longer jumping
-                holdingJump = false;
+                holdingJump = false; // Is not holding the jump button
             }
-            else if(!Input.GetButton("Jump"))
+            else if(!Input.GetButton("Jump")) // If the user just isnt holding the jump button
             {
-                holdingJump = false;
+                holdingJump = false; // Is not holding the jump button
             }
 
 
@@ -182,9 +180,9 @@ public class player_movment : MonoBehaviour // This script is related too player
                 thisAnim.SetBool("Crouching", false); // Tell animator to not use crouching animation
             } // Note: this dose nothing gameplay-wise it's just to use one of teh animations
 
-            if (Input.GetKey("escape"))
+            if (Input.GetKey("escape")) // Is esc button is pressed
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Return to main menu
             }
         }
     }
@@ -225,7 +223,7 @@ public class player_movment : MonoBehaviour // This script is related too player
         isStunned = false; // Set the flag to false
     }
 
-    public void setDead()
+    public void setDead() // Player is dead
     {
         thisAnim.SetBool("Dead", true);
         isDead = true;
@@ -233,11 +231,11 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     public void antiGravPlatform(bool on_or_off)
     {
-        isOnAntiGrav = on_or_off;
+        isOnAntiGrav = on_or_off; // When player steps on anti grav pad, flag that
     }
 
     public void normalGravPlatform(bool on_or_off)
     {
-        isOnNormalGrav = on_or_off;
+        isOnNormalGrav = on_or_off; // When player steps on normal grav pad, flag that
     }
 }

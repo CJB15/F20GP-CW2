@@ -18,19 +18,19 @@ public class anti_gravity_platform : MonoBehaviour
         
     }
 
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnCollisionEnter2D(Collision2D coll) // If player steps on anti gravity pad
     {
         if(coll.gameObject.tag == "Player") // If that thing is the player
         {
-            playermove.antiGravPlatform(true);
+            playermove.antiGravPlatform(true); // Flag the player movment script
         }
     }
 
-    void OnCollisionExit2D(Collision2D coll)
+    void OnCollisionExit2D(Collision2D coll) // If player steps off anti gravity pad
     {
         if(coll.gameObject.tag == "Player") // If that thing is the player
         {
-            playermove.antiGravPlatform(false);
+            playermove.antiGravPlatform(false); // Flag the player movment script
         }
     }
 }
