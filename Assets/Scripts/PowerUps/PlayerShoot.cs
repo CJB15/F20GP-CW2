@@ -9,14 +9,15 @@ public class PlayerShoot : MonoBehaviour
     public ShootEffect shootVar;
     
     public bool gunShot = true;
+    
+   
     public void Start(){
-     //  shootVar = FindObjectOfType<ShootEffect>();
 
     }
 
     public void Update(){
 
-       // shootVar = FindObjectOfType<ShootEffect>();
+      
         if (shootVar != null) {
            
              if (shootVar.isPicked){
@@ -29,15 +30,13 @@ public class PlayerShoot : MonoBehaviour
 
     public void shoot()
     { 
-        
-      //  Debug.Log("hello");
 
-        if (Input.GetKeyDown("f") && gunShot)
+        if (Input.GetKeyDown("f") && gunShot && Input.GetAxis("Horizontal")!=0 )
         {
-           // Debug.Log("hello");
+           
             Instantiate(bullet, transform.position,transform.rotation);
             shootVar.isPicked = false;
-            //gunShot = false;
+           
         }
     }
     

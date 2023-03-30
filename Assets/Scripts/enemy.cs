@@ -43,6 +43,36 @@ public class enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate() // Depending on the stage of the patrol cycle the enemy moves left, right or idles
     {
+        // float variable that will hold the "speed" of our move towards, we make sure it is multiplied against time so it coincides with the frame speed.
+        float step = 2.0f * Time.deltaTime;
+
+    // If the player is a certain distance away from the enemy, it will then begin to chase him. This is another state. If it is not, then the enemy will patrol the area.
+        if (Vector3.Distance(playermove.transform.position,transform.position) < 3) {
+            // Temporary Vector3 variable created to hold the movetowards function, used so we can compare the current enemy position vs the move towards one, checking
+            // their x values to see what way we need to flip the sprite in the x axis.
+            Vector3 temp = Vector3.MoveTowards(transform.position,playermove.transform.position,step);
+            
+            // if the enemy will be moving to the left, we dont flip it and keep it in its natural position.
+            if (temp.x < transform.position.x){
+                GetComponent<SpriteRenderer>().flipX = false;
+
+            }
+
+            // if it is, we flip the sprite.
+            else if (temp.x > transform.position.x){
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+
+            transform.position = temp;
+
+            // also make sure to set the walking animation to true, so it begins the cycle.
+            thisAnim.SetBool("Walking", true);
+          
+        }
+        else{
+
+
+
         if(isDead)
         {
             // Do nothing
@@ -71,7 +101,11 @@ public class enemy : MonoBehaviour
                 GetComponent<SpriteRenderer>().flipX = true;
                 thisAnim.SetBool("Walking", false);
         }
+
+        }
        
+
+
     }
 
     void OnTriggerStay2D(Collider2D coll) // If somthing collides with the enemy

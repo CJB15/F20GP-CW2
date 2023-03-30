@@ -22,6 +22,9 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     bool isDead = false; // Is player Dead
 
+    public float inputX;
+    public float inputY;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +40,8 @@ public class player_movment : MonoBehaviour // This script is related too player
     {
         if(!isStunned && !isDead && !player_static)
         {
-            float inputX = Input.GetAxis("Horizontal"); // Gets users left or right input
-            float inputY = Input.GetAxis("Vertical"); // Gets users up or down input
+            inputX = Input.GetAxis("Horizontal"); // Gets users left or right input
+            inputY = Input.GetAxis("Vertical"); // Gets users up or down input
 
             if (inputX > 0) // If user gives right imput
             {
