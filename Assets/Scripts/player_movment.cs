@@ -94,6 +94,7 @@ public class player_movment : MonoBehaviour // This script is related too player
             }
 
             if((BodyPlayer.velocity.y < 0.001 && !gravityIsInverted) || (BodyPlayer.velocity.y > 0.01 && gravityIsInverted)) // If player isn't moving away from the point they jumped away from
+            {
                 thisAnim.SetBool("Jumping", false); // Tell animator to not use jumping animaton
                 isJumping = false; // Flag that the jump has ended
             }

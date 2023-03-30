@@ -1209,7 +1209,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6478585038978723476, guid: 42a783ba3182c4046b3b2e754ffb9aba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.78
+      value: -7.75
       objectReference: {fileID: 0}
     - target: {fileID: 6478585038978723476, guid: 42a783ba3182c4046b3b2e754ffb9aba, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1217,7 +1217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6478585038978723476, guid: 42a783ba3182c4046b3b2e754ffb9aba, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.85
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6478585038978723476, guid: 42a783ba3182c4046b3b2e754ffb9aba, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1984,6 +1984,10 @@ PrefabInstance:
       propertyPath: movingCamera
       value: 
       objectReference: {fileID: 261952230}
+    - target: {fileID: 7549964335308832596, guid: 047332d00d9c19c4c941f298bc8c49dd, type: 3}
+      propertyPath: doubleJumpAbility
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7549964335308832599, guid: 047332d00d9c19c4c941f298bc8c49dd, type: 3}
       propertyPath: m_GravityScale
       value: 1
