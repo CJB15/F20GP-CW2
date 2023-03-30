@@ -209,7 +209,7 @@ public class player_movment : MonoBehaviour // This script is related too player
         {
             Vector2 temp = BodyPlayer.velocity;
             temp.x = xAmount;
-            temp.y = -yAmount;
+            temp.y = yAmount;
             BodyPlayer.velocity = temp;
         }
         StartCoroutine(stunned()); // Stun the player

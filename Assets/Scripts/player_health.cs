@@ -10,8 +10,8 @@ public class player_health : MonoBehaviour // This script holds the players heal
     bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
     public int iFrameLength = 2; // The seconds the player is immortal for after taking damage
 
-    public bool GodMode = false; // Used for debugging, makes player unable to take damage
-    public bool DemiGodMode = false; // Used for debugging, makes player unable to drop below 1 health
+    bool GodMode = false; // Used for debugging, makes player unable to take damage
+    bool DemiGodMode = false; // Used for debugging, makes player unable to drop below 1 health
 
     public int xKnockback = 3;
     public int yKnockback = 4;
@@ -39,6 +39,16 @@ public class player_health : MonoBehaviour // This script holds the players heal
 
         playermove = GameObject.FindGameObjectWithTag("Player").GetComponent<player_movment>(); // Used to call function in health_counter
         playergem = GameObject.FindGameObjectWithTag("Player").GetComponent<player_collectable>(); // Used to call function in health_counter
+    
+        if(PlayerPrefs.GetInt("GodMode") == 1)
+        {
+            GodMode = true;
+        }
+
+        if(PlayerPrefs.GetInt("DemiGodMode") == 1)
+        {
+            DemiGodMode = true;
+        }
     }
 
     // Update is called once per frame
@@ -72,18 +82,16 @@ public class player_health : MonoBehaviour // This script holds the players heal
     {
         if(!InvulnerabilityFrames && !GodMode && !isDead) // If not invulnerable, god mode or already dead, take damage
         {
-            if(DemiGodMode && (player_current_health - damage) < 0) // If the player has demi god mode and is about to die, don't die
+            player_current_health = player_current_health - damage; // Reduce player health by damage
+
+            if(player_current_health <= 0 && DemiGodMode) // If in demi god mode, dont let health drop below 1
             {
                 player_current_health = 1;
             }
-            else
-            {
-                player_current_health = player_current_health - damage; // Reduce player health by damage
-            }
-
+            
             if(player_current_health <= 0) // If player has no health
             {
-                StartCoroutine(playerDead());
+                StartCoroutine(playerDead()); // Kill player
             }
             else // If they do have health
             {
