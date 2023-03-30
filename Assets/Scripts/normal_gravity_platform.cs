@@ -18,19 +18,19 @@ public class normal_gravity_platform : MonoBehaviour
         
     }
 
-    void OnCollisionEnter2D(Collision2D coll)
+    void OnCollisionEnter2D(Collision2D coll) // If player steps on normal gravity pad
     {
         if(coll.gameObject.tag == "Player") // If that thing is the player
         {
-            playermove.normalGravPlatform(true);
+            playermove.normalGravPlatform(true); // Flag the player movment script
         }
     }
 
-    void OnCollisionExit2D(Collision2D coll)
+    void OnCollisionExit2D(Collision2D coll) // If player steps on normal gravity pad
     {
         if(coll.gameObject.tag == "Player") // If that thing is the player
         {
-            playermove.normalGravPlatform(false);
+            playermove.normalGravPlatform(false); // Flag the player movment script
         }
     }
 }

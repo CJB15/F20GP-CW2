@@ -24,7 +24,7 @@ public class main_menu : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        Application.Quit(); // Quits the application, only works in built version
     }
 
     public void GodMode(bool status) // TODO dose not work, set manually in inspector
