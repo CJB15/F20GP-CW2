@@ -93,6 +93,15 @@ public class enemy : MonoBehaviour
                 alerted = false;
                 GameObject spotPlayerEmote = Instantiate(lostEmote, this.transform.position, this.transform.rotation); // Leave gem behind
                 spotPlayerEmote.transform.parent = transform;
+                
+                if(enemySprite.flipX == false)
+                {
+                    patrolStage = 1;
+                }
+                else
+                {
+                    patrolStage = 3;
+                }
             }
 
             if (patrolStage == 0)
