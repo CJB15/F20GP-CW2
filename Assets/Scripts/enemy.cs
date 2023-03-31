@@ -28,6 +28,10 @@ public class enemy : MonoBehaviour
 
     public bool isDead = false;
 
+    bool alerted = false;
+    public GameObject alertEmote;
+    public GameObject lostEmote;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +58,13 @@ public class enemy : MonoBehaviour
         }
         else if (Vector3.Distance(playermove.transform.position,transform.position) < 3) // If the player is a certain distance away from the enemy, it will then begin to chase him. This is another state. If it is not, then the enemy will patrol the area.
         {
+            if(!alerted)
+            {
+                alerted = true;
+                GameObject spotPlayerEmote = Instantiate(alertEmote, this.transform.position, this.transform.rotation); // Leave gem behind
+                spotPlayerEmote.transform.parent = transform;
+            }
+
             // Temporary Vector3 variable created to hold the movetowards function, used so we can compare the current enemy position vs the move towards one, checking
             // their x values to see what way we need to flip the sprite in the x axis.
             Vector3 temp = Vector3.MoveTowards(transform.position,playermove.transform.position,step);
@@ -77,7 +88,23 @@ public class enemy : MonoBehaviour
         }
         else // If player is not near then patroll back and forth on a cycle
         {
-            if(patrolStage == 0)
+            if (alerted)
+            {
+                alerted = false;
+                GameObject spotPlayerEmote = Instantiate(lostEmote, this.transform.position, this.transform.rotation); // Leave gem behind
+                spotPlayerEmote.transform.parent = transform;
+                
+                if(enemySprite.flipX == false)
+                {
+                    patrolStage = 1;
+                }
+                else
+                {
+                    patrolStage = 3;
+                }
+            }
+
+            if (patrolStage == 0)
             {
                 enemySprite.flipX = false;
                 thisAnim.SetBool("Walking", true);
