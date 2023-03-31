@@ -7,8 +7,8 @@ public class enemy : MonoBehaviour
     player_health playerhp; // Used to call function in player_health
     player_movment playermove; // Used to call function in player_movment
 
-    CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
-    Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
+    public CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
+    public Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
 
     public int enemyDamage = 1; //  Damage the enemy dose to the player
     
@@ -19,13 +19,13 @@ public class enemy : MonoBehaviour
     public float patrolTime = 2; // How long each phase of the patrol cycle lasts for
     public float enemyWalkSpeed = 2; // How fast the enemy moves
 
-    private Animator thisAnim; // Holds the enemies animator
+    public Animator thisAnim; // Holds the enemies animator
 
     int patrolStage = 0; // Stage of the patrol cycle
 
     public GameObject GemObject; // Creates a new gameobject, used to create a gem
 
-    bool isDead = false;
+    public bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,36 @@ public class enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate() // Depending on the stage of the patrol cycle the enemy moves left, right or idles
     {
+        // float variable that will hold the "speed" of our move towards, we make sure it is multiplied against time so it coincides with the frame speed.
+        float step = 2.0f * Time.deltaTime;
+
+    // If the player is a certain distance away from the enemy, it will then begin to chase him. This is another state. If it is not, then the enemy will patrol the area.
+        if (Vector3.Distance(playermove.transform.position,transform.position) < 3) {
+            // Temporary Vector3 variable created to hold the movetowards function, used so we can compare the current enemy position vs the move towards one, checking
+            // their x values to see what way we need to flip the sprite in the x axis.
+            Vector3 temp = Vector3.MoveTowards(transform.position,playermove.transform.position,step);
+            
+            // if the enemy will be moving to the left, we dont flip it and keep it in its natural position.
+            if (temp.x < transform.position.x){
+                GetComponent<SpriteRenderer>().flipX = false;
+
+            }
+
+            // if it is, we flip the sprite.
+            else if (temp.x > transform.position.x){
+                GetComponent<SpriteRenderer>().flipX = true;
+            }
+
+            transform.position = temp;
+
+            // also make sure to set the walking animation to true, so it begins the cycle.
+            thisAnim.SetBool("Walking", true);
+          
+        }
+        else{
+
+
+
         if(isDead)
         {
             // Do nothing
@@ -71,7 +101,11 @@ public class enemy : MonoBehaviour
                 GetComponent<SpriteRenderer>().flipX = true;
                 thisAnim.SetBool("Walking", false);
         }
+
+        }
        
+
+
     }
 
     void OnTriggerStay2D(Collider2D coll) // If somthing collides with the enemy
@@ -98,6 +132,7 @@ public class enemy : MonoBehaviour
                 playerhp.playerDamage(enemyDamage, "Right"); // Hurt player, push left
             }
         }
+        
     }
 
     void patrolCycle()
@@ -120,7 +155,7 @@ public class enemy : MonoBehaviour
         }
     }
 
-    IEnumerator enemyDead()
+    public IEnumerator enemyDead()
     {
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject); // Kill enemy

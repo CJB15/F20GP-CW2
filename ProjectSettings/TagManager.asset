@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Health UI
   - Gem UI
+  - Tilemap
+  - Gem
+  - bullet
   layers:
   - Default
   - TransparentFX
