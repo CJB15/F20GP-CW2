@@ -9,6 +9,7 @@ public class enemy : MonoBehaviour
 
     public CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
     public Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
+    SpriteRenderer enemySprite;
 
     public int enemyDamage = 1; //  Damage the enemy dose to the player
     
@@ -36,31 +37,36 @@ public class enemy : MonoBehaviour
         ColliderEnemy = GetComponents<CapsuleCollider2D>(); // Gets both colliders, ColliderEnemy[0] detects collison with the player to damage them and ColliderEnemy[1] is the physical collider that stops the player clipping into the enemy
         bodyEnemy = GetComponent<Rigidbody2D>(); // Gets the rigidbody
         thisAnim = GetComponent<Animator>(); // Gets the animator
+        enemySprite = GetComponent<SpriteRenderer>();
 
         InvokeRepeating("patrolCycle", 0, patrolTime); // Starts the patrol cycle
     }
 
     // Update is called once per frame
-    void FixedUpdate() // Depending on the stage of the patrol cycle the enemy moves left, right or idles
+    void FixedUpdate()
     {
         // float variable that will hold the "speed" of our move towards, we make sure it is multiplied against time so it coincides with the frame speed.
         float step = 2.0f * Time.deltaTime;
 
-    // If the player is a certain distance away from the enemy, it will then begin to chase him. This is another state. If it is not, then the enemy will patrol the area.
-        if (Vector3.Distance(playermove.transform.position,transform.position) < 3) {
+        if(isDead) // If dead, enemy dose nothing
+        {
+            // Do nothing
+        }
+        else if (Vector3.Distance(playermove.transform.position,transform.position) < 3) // If the player is a certain distance away from the enemy, it will then begin to chase him. This is another state. If it is not, then the enemy will patrol the area.
+        {
             // Temporary Vector3 variable created to hold the movetowards function, used so we can compare the current enemy position vs the move towards one, checking
             // their x values to see what way we need to flip the sprite in the x axis.
             Vector3 temp = Vector3.MoveTowards(transform.position,playermove.transform.position,step);
             
             // if the enemy will be moving to the left, we dont flip it and keep it in its natural position.
-            if (temp.x < transform.position.x){
-                GetComponent<SpriteRenderer>().flipX = false;
-
+            if (temp.x < transform.position.x)
+            {
+                enemySprite.flipX = false;
             }
-
             // if it is, we flip the sprite.
-            else if (temp.x > transform.position.x){
-                GetComponent<SpriteRenderer>().flipX = true;
+            else if (temp.x > transform.position.x)
+            {
+                enemySprite.flipX = true;
             }
 
             transform.position = temp;
@@ -69,39 +75,32 @@ public class enemy : MonoBehaviour
             thisAnim.SetBool("Walking", true);
           
         }
-        else{
-
-
-
-        if(isDead)
+        else // If player is not near then patroll back and forth on a cycle
         {
-            // Do nothing
-        }
-        else if(patrolStage == 0)
-        {
-                GetComponent<SpriteRenderer>().flipX = false;
+            if(patrolStage == 0)
+            {
+                enemySprite.flipX = false;
                 thisAnim.SetBool("Walking", true);
 
                 transform.Translate((-enemyWalkSpeed * Time.deltaTime), 0, 0);
-        }
-        else if(patrolStage == 1)
-        {
-                GetComponent<SpriteRenderer>().flipX = false;
+            }
+            else if(patrolStage == 1)
+            {
+                enemySprite.flipX = false;
                 thisAnim.SetBool("Walking", false);
-        }
-        else if(patrolStage == 2)
-        {
-                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if(patrolStage == 2)
+            {
+                enemySprite.flipX = true;
                 thisAnim.SetBool("Walking", true);
 
                 transform.Translate((enemyWalkSpeed * Time.deltaTime), 0, 0);
-        }
-        else if(patrolStage == 3)
-        {
-                GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if(patrolStage == 3)
+            {
+                enemySprite.flipX = true;
                 thisAnim.SetBool("Walking", false);
-        }
-
+            }
         }
        
 
@@ -118,7 +117,7 @@ public class enemy : MonoBehaviour
                 Destroy(bodyEnemy);
                 Destroy(ColliderEnemy[0]);
                 Destroy(ColliderEnemy[1]);
-                GetComponent<SpriteRenderer>().flipX = false;
+                enemySprite.flipX = false;
                 thisAnim.SetBool("Dead", true);
                 StartCoroutine(enemyDead());
                 playermove.playerKnockBack(0, yKnockback); // Knock the play upwards
