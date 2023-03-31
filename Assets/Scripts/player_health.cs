@@ -21,6 +21,8 @@ public class player_health : MonoBehaviour // This script holds the players heal
     public player_collectable playergem;
     public Renderer rend; // Used to disable the rederer later
 
+    public bool facingRight = true;
+
     bool isDead = false;
 
     // Start is called before the first frame update
@@ -35,7 +37,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
         hpcounter = GameObject.FindGameObjectWithTag("Health UI").GetComponent<health_counter>(); // Used to call function in player_movment
         hpcounter.updateHealthCount(player_current_health, player_max_health); // Calls function in health_counter, sets the health display to show current health
     
-        rend = GetComponent<Renderer>();
+        rend = GetComponent<Renderer>(); 
 
         playermove = GameObject.FindGameObjectWithTag("Player").GetComponent<player_movment>(); // Used to call function in health_counter
         playergem = GameObject.FindGameObjectWithTag("Player").GetComponent<player_collectable>(); // Used to call function in health_counter
