@@ -8,8 +8,6 @@ public class gems : MonoBehaviour // This script is the functions for teh collec
     CircleCollider2D ColliderGem;
     Animator thisAnim; // Holds the gems animator
 
-    bool isCollected = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -23,11 +21,10 @@ public class gems : MonoBehaviour // This script is the functions for teh collec
         if(coll.gameObject.tag == "Player") // If that thing is the player
         {
             player.addGem(1); // Call a function in player_collectable to increase their gem count by 1
-            isCollected = true;
             Destroy(ColliderGem);
             thisAnim.SetBool("Collected", true);
             StartCoroutine(gemCollected());
-            // TODO Add some cool visual and sound effects here
+            // TODO Add some cool sound effects here
         }
     }
 

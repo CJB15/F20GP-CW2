@@ -10,7 +10,11 @@ public class enemy : MonoBehaviour
     CapsuleCollider2D[] ColliderEnemy; // Holds the enimes 2 colliders
     Rigidbody2D bodyEnemy; // Holds the enimes rigidbody
 
+    public int enemyHp = 1; // Health points of the enemy
+
     public int enemyDamage = 1; //  Damage the enemy dose to the player
+
+    public int[] selfKnockback = {3,4};  
     
     public int yKnockback = 4; // Amount the player is puched after jumping on the enemy
 
@@ -26,6 +30,7 @@ public class enemy : MonoBehaviour
     public GameObject GemObject; // Creates a new gameobject, used to create a gem
 
     bool isDead = false;
+    public Renderer rend; // Used to disable the rederer later
 
     // Start is called before the first frame update
     void Start()
@@ -126,5 +131,55 @@ public class enemy : MonoBehaviour
         Destroy(gameObject); // Kill enemy
         GameObject newGem = Instantiate(GemObject, this.transform.position, this.transform.rotation); // Leave gem behind
     }
+
+    IEnumerator iFrames()
+    {
+        // InvulnerabilityFrames = true; // Set the flag to true
+        for(var i = 0 ; i < 2 * 4 ; i++) // Loop for the set amount of time
+        {
+            rend.enabled = false; // Flickering their dprite to indocate the immortality
+            yield return new WaitForSeconds(0.125f);
+            rend.enabled = true;
+            yield return new WaitForSeconds(0.125f);
+        }
+        // InvulnerabilityFrames = false; // Set the flag to false
+    }
+
+
+
+
+
+    //damage enemy and knockback
+
+    public void damageEnemy(int damage, string direction){
+        if(enemyHp<=0){
+            StartCoroutine(enemyDead());
+        }
+        else if(enemyHp>=1){
+            enemyHp -= damage;
+            StartCoroutine(iFrames()); // Give the player invulnerability frames
+            enemyHurtKnockBack(direction);
+            thisAnim.SetBool("Hurt", true);
+        }
+    }
+
+    // public void enemyKnockBack(int xAmount, int yAmount) // Can be called by other scripts to push players
+    // {
+    //     GetComponent<Rigidbody2D>().AddForce(new Vector2(xAmount, yAmount), ForceMode2D.Impulse); // Apply a specified force to the player
+    // }
+
+    public void enemyHurtKnockBack(string direction) // Called by player_health to push player specificaly when they takes damage
+    {
+        if(direction == "Right") // Knock the player left if hit from right
+        {
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(selfKnockback[0], selfKnockback[1]), ForceMode2D.Impulse); // Apply a force to knock player backwards
+        }
+        else // Knock the player right if hit from the left
+        {
+            GetComponent<Rigidbody2D>().AddForce(new Vector2(-selfKnockback[0], selfKnockback[1]), ForceMode2D.Impulse); // Apply a force to knock player backwards
+        }
+        // StartCoroutine(stunned()); // Stun the player
+    }
+
 
 }

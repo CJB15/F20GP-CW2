@@ -8,8 +8,6 @@ public class health_pickup : MonoBehaviour // This script is the functions for t
     CircleCollider2D ColliderCherry;
     Animator thisAnim; // Holds the gems animator
 
-    bool isCollected = false;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,12 +24,11 @@ public class health_pickup : MonoBehaviour // This script is the functions for t
 
             if (healed)
             {
-                isCollected = true;
                 Destroy(ColliderCherry);
                 thisAnim.SetBool("Collected", true);
                 StartCoroutine(cherryCollected());
             }
-            // TODO Add some cool visual and sound effects here
+            // TODO Add some cool sound effects here
         }
     }
 

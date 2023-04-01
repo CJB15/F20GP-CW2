@@ -1,0 +1,140 @@
+[33mcommit ff847b85277cdb4a36eb8d06f7b7844d5160ce22[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;32mF20Gp-CW2/main[m[33m)[m
+Author: 22jb <22jb@github.com>
+Date:   Fri Mar 31 08:48:35 2023 +0100
+
+    save changes
+
+[33mcommit ffbc2addfed2a500d129d2c244768453aece4666[m[33m ([m[1;31mF20GP-CW2/main[m[33m, [m[1;32mlist[m[33m)[m
+Merge: 429282f 1f8cfec
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 22:11:51 2023 +0100
+
+    Merge pull request #3 from CJB15/master
+    
+    Quit Button
+
+[33mcommit 1f8cfec8a7cdbd6b5d2dd74e3adfae0da61eafc2[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 22:09:38 2023 +0100
+
+    Quit Button
+
+[33mcommit 429282f753bdffc8c80ea5aa1f13896c89677847[m
+Merge: 45e0200 7ea5cd3
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 22:07:42 2023 +0100
+
+    Merge pull request #2 from CJB15/master
+    
+    Master merge
+
+[33mcommit 7ea5cd375e2f386d1975d645ec2de2c6e48cb185[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 21:36:40 2023 +0100
+
+    Small Animation Tweak
+
+[33mcommit 3787866e92da31a81725ffe883f9b2845b28ee45[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 21:23:20 2023 +0100
+
+    Update README.md
+
+[33mcommit 260b961f89fc9386eedea5b8a1ba2b9687580306[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 21:20:00 2023 +0100
+
+    Added aniamtions to enemy death and gem collection
+
+[33mcommit 45e0200adbc74cbeba04621d66d7b7df7e24ff9b[m
+Merge: ef20e13 572abd4
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 02:42:50 2023 +0100
+
+    Merge pull request #1 from CJB15/master
+    
+    Merging things i did
+
+[33mcommit 572abd4451d8fcee05e700835d928b319ca55311[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 02:41:55 2023 +0100
+
+    Update README.md
+
+[33mcommit 3d7688686f4e0aa557dd9b9856b1d2858546c56d[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 02:39:58 2023 +0100
+
+    Commentary and tweaks
+
+[33mcommit 523d10f0d82eae641a901950e3e1d35f4d22c97f[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 27 02:21:48 2023 +0100
+
+    Main menu and stuff
+
+[33mcommit ef20e13e1461c253bd4783874fbd443e306d6d91[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Sun Mar 26 20:54:35 2023 +0100
+
+    Added Health Pickups to example scenario
+
+[33mcommit 7add5a348287a0cd9139ac1b13a07c3f4465b5d9[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Sun Mar 26 20:53:37 2023 +0100
+
+    Added function to heal player
+
+[33mcommit f9c98ef292e857db5ba1c6adb63486d1b3dfff1f[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Sun Mar 26 20:52:57 2023 +0100
+
+    Health Pickups
+
+[33mcommit e7bbc1c7bbf65cb532ebf00b239f57d0ba492a5a[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Sun Mar 26 20:52:10 2023 +0100
+
+    Health Pickups
+
+[33mcommit 7d22f36b42da98be2bc3cbd95fe784ed41fc28ce[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Tue Mar 21 23:48:05 2023 +0000
+
+    Added moving platform to exaple scenario
+
+[33mcommit cc887d9aa27a8439c3ed27ecb438afdee591650d[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Tue Mar 21 23:47:22 2023 +0000
+
+    FInished(?), it works but it's def inefficient
+
+[33mcommit e8a139250024494ca856b29adeb71931a3e19c1f[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Tue Mar 21 12:42:08 2023 +0000
+
+    Made bool InvulnerabilityFrames not Public
+
+[33mcommit a347dc3b7067031b9195dc1a963f9aa6d4eb1891[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Tue Mar 21 12:40:47 2023 +0000
+
+     Moving Platform Test, Still TODO
+
+[33mcommit c856ee444256b06bcd2a7dfd630118b12ef609c0[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Tue Mar 21 12:40:23 2023 +0000
+
+    Moving Platform Test, Still TODO
+
+[33mcommit 02c41641078995dd01f37519f9959d0e51436957[m
+Author: Cameron <cjb15@hw.ac.uk>
+Date:   Mon Mar 20 22:57:23 2023 +0000
+
+    It works!!
+
+[33mcommit 33b63815f206b2e3ba9bedb9d880f3bf1e301f62[m
+Author: unknown <cjb15@hw.ac.uk>
+Date:   Mon Mar 20 22:50:07 2023 +0000
+
+    Minor Asset clean up
