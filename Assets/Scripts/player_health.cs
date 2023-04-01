@@ -5,7 +5,9 @@ using UnityEngine;
 public class player_health : MonoBehaviour // This script holds the players health and function to reduce it
 {
     public int player_max_health = 6; // Players Max health
-    public int player_current_health; // Players current health
+    public int player_current_health = 0; // Players current health
+
+    bool doubleHealth;
 
     bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
     public int iFrameLength = 2; // The seconds the player is immortal for after taking damage
@@ -26,7 +28,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
     // Start is called before the first frame update
     void Start()
     {
-        player_current_health = PlayerPrefs.GetInt("player_current_health"); // Sets their health to the saved value
+        //player_current_health = PlayerPrefs.GetInt("player_current_health"); // Sets their health to the saved value, uncomment if you wan tot save health between levels
         if(player_current_health <= 0) // If the saved value is 0 the set to max
         {
             player_current_health = player_max_health; // Set players health to max
@@ -124,5 +126,24 @@ public class player_health : MonoBehaviour // This script holds the players heal
         yield return new WaitForSeconds(3);
         playergem.setGem(0); // Sets gemcount to 0
         UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Send the user back to the menu
+    }
+
+    public void doubleHealthActive(bool active)
+    {
+        if(!doubleHealth && active)
+        {
+            player_max_health = player_max_health * 2;
+            player_current_health = player_current_health * 2;
+
+            doubleHealth = true;
+        }
+        else if(doubleHealth && !active)
+        {
+            player_max_health = player_max_health / 2;
+            player_current_health = (int)Mathf.Ceil(player_current_health / 2f);
+
+            doubleHealth = false;
+        }
+        hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
     }
 }

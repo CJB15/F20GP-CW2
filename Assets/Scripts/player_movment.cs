@@ -40,6 +40,8 @@ public class player_movment : MonoBehaviour // This script is related too player
     public float inputX;
     public float inputY;
 
+    bool crouching = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -178,11 +180,13 @@ public class player_movment : MonoBehaviour // This script is related too player
             if (inputY < 0) // If user presses down
             {
                 thisAnim.SetBool("Crouching", true); // Tell animator to use crouching animation
+                crouching = true;
             }
             else // If not
             {
                 thisAnim.SetBool("Crouching", false); // Tell animator to not use crouching animation
-            } // Note: this dose nothing gameplay-wise it's just to use one of teh animations
+                crouching = false;
+            }
 
             if (Input.GetKey("escape")) // Is esc button is pressed
             {
@@ -241,5 +245,16 @@ public class player_movment : MonoBehaviour // This script is related too player
     public void normalGravPlatform(bool on_or_off)
     {
         isOnNormalGrav = on_or_off; // When player steps on normal grav pad, flag that
+    }
+
+    public void doubleJumpActive(bool active)
+    {
+        doubleJumpAbility = active;
+        canDoubleJump = active;
+    }
+
+    public bool getCrouching()
+    {
+        return crouching;
     }
 }

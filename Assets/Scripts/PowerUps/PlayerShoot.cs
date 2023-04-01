@@ -6,39 +6,41 @@ public class PlayerShoot : MonoBehaviour
 {
     public GameObject bullet;
     
-    public ShootEffect shootVar;
+    //public ShootEffect shootVar;
+
+    bool hasFireBallAbility = false;
     
-    public bool gunShot = true;
-    
+    bool gunShot = false;
+
+    public float rechargeTime = 1f;
    
     public void Start(){
-
+        
     }
 
     public void Update(){
-
-      
-        if (shootVar != null) {
-           
-             if (shootVar.isPicked){
-              shoot();
-             }
+        if (Input.GetKey("f") && !gunShot && hasFireBallAbility)
+        {
+            shoot();
         }
-     
-       
     }
 
     public void shoot()
     { 
-
-        if (Input.GetKeyDown("f") && gunShot && Input.GetAxis("Horizontal")!=0 )
-        {
-           
-            Instantiate(bullet, transform.position,transform.rotation);
-            shootVar.isPicked = false;
-           
-        }
+        Instantiate(bullet, transform.position,transform.rotation);
+        gunShot = true;
+        StartCoroutine(rechargeShot());
     }
     
+    public IEnumerator rechargeShot()
+    {
+        yield return new WaitForSeconds(rechargeTime);
+        gunShot = false;
+    }
+
+    public void fireBallActive(bool active)
+    {
+        hasFireBallAbility = active;
+    }
     
 }

@@ -9,6 +9,8 @@ TagManager:
   - Tilemap
   - Gem
   - bullet
+  - PowerUp
+  - Power Up UI
   layers:
   - Default
   - TransparentFX

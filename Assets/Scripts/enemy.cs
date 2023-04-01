@@ -140,12 +140,6 @@ public class enemy : MonoBehaviour
         {
             if ((coll.transform.position.y - this.transform.position.y) > yCoordHeadStop) // If the enemy is hit from the top
             {
-                isDead = true;
-                Destroy(bodyEnemy);
-                Destroy(ColliderEnemy[0]);
-                Destroy(ColliderEnemy[1]);
-                enemySprite.flipX = false;
-                thisAnim.SetBool("Dead", true);
                 StartCoroutine(enemyDead());
                 playermove.playerKnockBack(0, yKnockback); // Knock the play upwards
             }
@@ -183,6 +177,12 @@ public class enemy : MonoBehaviour
 
     public IEnumerator enemyDead()
     {
+        isDead = true;
+        Destroy(bodyEnemy);
+        Destroy(ColliderEnemy[0]);
+        Destroy(ColliderEnemy[1]);
+        enemySprite.flipX = false;
+        thisAnim.SetBool("Dead", true);
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject); // Kill enemy
         GameObject newGem = Instantiate(GemObject, this.transform.position, this.transform.rotation); // Leave gem behind

@@ -7,6 +7,8 @@ public class player_collectable : MonoBehaviour // This script is holds call teh
     private gem_counter counter; // Used to call function in gem_counter
 
     public int gem_count; // The players total gem count
+
+    bool doubleGems = false;
     
     // Start is called before the first frame update
     void Start()
@@ -19,7 +21,14 @@ public class player_collectable : MonoBehaviour // This script is holds call teh
 
     public void addGem(int amount) // Can be called to make player gain any amount of gems
     {
-        gem_count = gem_count + amount; // The gem count increases by the passed amount
+        if(doubleGems)
+        {
+            gem_count = gem_count + (amount * 2); // The gem count increases by the passed amount
+        }
+        else
+        {
+            gem_count = gem_count + amount; // The gem count increases by the passed amount
+        }
         
         counter.updateGemCount(gem_count); // Calls function in gem_counter, sets the gem count display to show current gem count
         
@@ -33,5 +42,10 @@ public class player_collectable : MonoBehaviour // This script is holds call teh
         counter.updateGemCount(gem_count); // Calls function in gem_counter, sets the gem count display to show current gem count
         
         PlayerPrefs.SetInt("gem_count", gem_count); // Updates the saved amount
+    }
+
+    public void doubleGemsctive(bool active)
+    {
+        doubleGems = active;
     }
 }
