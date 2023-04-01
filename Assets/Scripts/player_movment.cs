@@ -13,6 +13,13 @@ public class player_movment : MonoBehaviour // This script is related too player
     private Animator thisAnim; // The animator the changes the animations
 
     CapsuleCollider2D ColliderPlayer;
+    Rigidbody2D BodyPlayer;
+    SpriteRenderer SpritePlayer;
+
+    public player_camera movingCamera;
+
+    RaycastHit2D hit;
+
     int layerMaskGround;
     float heightTestPlayer;
 
@@ -42,6 +49,9 @@ public class player_movment : MonoBehaviour // This script is related too player
     Player_attack pa;
     public int wallJumpCounter = 0;
     public bool wallJumping;
+    bool isOnAntiGrav = false;
+    bool isOnNormalGrav = false;
+    bool gravityIsInverted = false;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +60,9 @@ public class player_movment : MonoBehaviour // This script is related too player
         rb = GetComponent<Rigidbody2D>();
 
         ColliderPlayer = GetComponent<CapsuleCollider2D>(); // Gets the players collision box, capsule shape used as square collision corners cause issues with slopes.
+        BodyPlayer = GetComponent<Rigidbody2D>(); // Gets players rigib body
+        SpritePlayer = GetComponent<SpriteRenderer>(); // Gets players sprite
+
         heightTestPlayer = ColliderPlayer.bounds.extents.y + 0.05f; //  Gets ...used in ray cast later on
         layerMaskGround = LayerMask.GetMask("Ground"); //  Ground objects are in teh "Ground" layer
         wallLayer = LayerMask.GetMask("Wall");
@@ -73,6 +86,7 @@ public class player_movment : MonoBehaviour // This script is related too player
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
                 GetComponent<SpriteRenderer>().flipX = false; // Sprite is redered default, facing right
                 facingRight = true;  //sets facing right to true as the last input will direct the player to the right
+                SpritePlayer.flipX = false; // Sprite is redered default, facing right
             }
             else if (inputX < 0) // If user gives left imput
             {
@@ -80,6 +94,7 @@ public class player_movment : MonoBehaviour // This script is related too player
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
                 GetComponent<SpriteRenderer>().flipX = true; // Sprite is redered mirrored, facing left
                 facingRight = false; //sets facing right to false as the last input will direct the player to the left
+                SpritePlayer.flipX = true; // Sprite is redered mirrored, facing left
             }
             else // If player not inputing either
             {
@@ -97,24 +112,70 @@ public class player_movment : MonoBehaviour // This script is related too player
             thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
 
             if(GetComponent<Rigidbody2D>().velocity.y < 0.01) // If player dosn't have positive verical velocity then they're jump has ended
+
+            if(gravityIsInverted)
             {
+                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.up, heightTestPlayer, layerMaskGround); // Create a raycast pointing down
+            }
+            else
+            {
+                hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down
+            }
+            
+            bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
+            thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
+            //if(isGrounded){Debug.Log("ground");}
+            if((BodyPlayer.velocity.y < 0.001 && !gravityIsInverted) || (BodyPlayer.velocity.y > 0.01 && gravityIsInverted)) // If player dosn't have positive verical velocity then they're jump has ended
+            {
+                //Debug.Log("stop");
                 thisAnim.SetBool("Jumping", false); // Tell animator to not use jumping animaton
                 isJumping = false; // Flag that the jump has ended
-            } 
+            }
             
             //if (inputY > 0 && isGrounded  && !isJumping) // This version uses the up arrow instead of the jump button
             if (Input.GetButton("Jump") && isGrounded && !isJumping) // If the user presses the jump button while grounded and not already jumping
             { // Note: isJumping is checked to ensure that the player dosn't jump on multiplr frames before leaving the ground, as that results in random and extreme jumps
-                thisAnim.SetBool("Jumping", true); // Tell the animator to use the jumping animation
-                isJumping = true; // Flag that the player is jumping
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(0, player_jump_height), ForceMode2D.Impulse); // Apply a force upwards
-                // TODO add jumping sound effect
+                if(true)
+                {
+                    thisAnim.SetBool("Jumping", true); // Tell the animator to use the jumping animation
+                    isJumping = true; // Flag that the player is jumping
+                    if (gravityIsInverted)
+                    {
+                        Vector2 temp = BodyPlayer.velocity;
+                        temp.y = -player_jump_height;
+                        BodyPlayer.velocity = temp;
+
+                        if(isOnNormalGrav)
+                        {
+                            BodyPlayer.gravityScale = 1;
+                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World);
+                            gravityIsInverted = false;
+                            movingCamera.cameraGravitySwitch();
+                        }
+                    }
+                    else if (!gravityIsInverted)
+                    {
+                        Vector2 temp = BodyPlayer.velocity;
+                        temp.y = player_jump_height;
+                        BodyPlayer.velocity = temp;
+
+                        if(isOnAntiGrav)
+                        {
+                            BodyPlayer.gravityScale = -1;
+                            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World);
+                            gravityIsInverted = true;
+                            movingCamera.cameraGravitySwitch();
+                        }
+                    }
+                    // TODO add jumping sound effect
+                }
+                
             }
             else if(!Input.GetButton("Jump") && isJumping) // If user releases the jump button while still traveing upwards
             {
-                Vector2 temp = GetComponent<Rigidbody2D>().velocity;
+                Vector2 temp = BodyPlayer.velocity;
                 temp.y = 0;
-                GetComponent<Rigidbody2D>().velocity = temp; // Stop jump immediatly by setting y velocity to 0
+                BodyPlayer.velocity = temp; // Stop jump immediatly by setting y velocity to 0
                 isJumping = false; // Is no longer jumping
             }
 
@@ -199,18 +260,27 @@ public class player_movment : MonoBehaviour // This script is related too player
     }
     public void playerKnockBack(int xAmount, int yAmount) // Can be called by other scripts to push players
     {
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(xAmount, yAmount), ForceMode2D.Impulse); // Apply a specified force to the player
+        Vector2 temp = BodyPlayer.velocity;
+        temp.x = -xAmount;
+        temp.y = yAmount;
+        BodyPlayer.velocity = temp;
     }
 
     public void playerHurtKnockBack(int xAmount, int yAmount, string direction) // Called by player_health to push player specificaly when they takes damage
     {
         if(direction == "Right") // Knock the player left if hit from right
         {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(-xAmount, yAmount), ForceMode2D.Impulse); // Apply a force to knock player backwards
+            Vector2 temp = BodyPlayer.velocity;
+            temp.x = -xAmount;
+            temp.y = yAmount;
+            BodyPlayer.velocity = temp;
         }
         else // Knock the player right if hit from the left
         {
-            GetComponent<Rigidbody2D>().AddForce(new Vector2(xAmount, yAmount), ForceMode2D.Impulse); // Apply a force to knock player backwards
+            Vector2 temp = BodyPlayer.velocity;
+            temp.x = xAmount;
+            temp.y = -yAmount;
+            BodyPlayer.velocity = temp;
         }
         StartCoroutine(stunned()); // Stun the player
     }
@@ -254,4 +324,13 @@ public class player_movment : MonoBehaviour // This script is related too player
 
 
 
+    public void antiGravPlatform(bool on_or_off)
+    {
+        isOnAntiGrav = on_or_off;
+    }
+
+    public void normalGravPlatform(bool on_or_off)
+    {
+        isOnNormalGrav = on_or_off;
+    }
 }

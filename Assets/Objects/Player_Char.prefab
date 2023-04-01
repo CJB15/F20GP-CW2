@@ -162,6 +162,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_speed: 4
   player_jump_height: 6
+  player_static: 0
+  movingCamera: {fileID: 3875968319466854831, guid: 88d476367be13ed49ba044cc11598034, type: 3}
   stunnedTime: 1
 --- !u!114 &7549964335308832597
 MonoBehaviour:
@@ -177,7 +179,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player_max_health: 6
   player_current_health: 0
-  InvulnerabilityFrames: 0
   iFrameLength: 2
   GodMode: 0
   DemiGodMode: 0
@@ -185,6 +186,7 @@ MonoBehaviour:
   yKnockback: 4
   hpcounter: {fileID: 0}
   playermove: {fileID: 0}
+  playergem: {fileID: 0}
   rend: {fileID: 0}
 --- !u!114 &7549964335308832594
 MonoBehaviour:

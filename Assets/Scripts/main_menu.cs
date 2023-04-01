@@ -14,6 +14,11 @@ public class main_menu : MonoBehaviour
 
     public void PlayLevel(int LevelNo) // Is called by the level buttons, parses an int to indicate which button
     {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Level " + LevelNo); // Loads the level, TODO: currently just loads SampleScene, change when more levels are made
+    }
+
+    public void TestWorld() // Is called by the level buttons, parses an int to indicate which button
+    {
         UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene"); // Loads the level, TODO: currently just loads SampleScene, change when more levels are made
     }
 
