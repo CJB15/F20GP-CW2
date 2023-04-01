@@ -104,16 +104,6 @@ public class player_movment : MonoBehaviour // This script is related too player
             }
 
             transform.Translate(((player_speed * inputX) * Time.deltaTime), 0, 0); // Convert user left/right input to left/right movment
-            
-            RaycastHit2D hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down
-            bool isGrounded = hit.collider != null; // If raycast hit's Ground layer object then is grounded, else not grounded.
-            if (isGrounded){
-                dashCounter = 1;
-                wallJumpCounter =0;
-            }
-            thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
-
-            if(GetComponent<Rigidbody2D>().velocity.y < 0.01) // If player dosn't have positive verical velocity then they're jump has ended
 
             if(gravityIsInverted)
             {
@@ -124,9 +114,13 @@ public class player_movment : MonoBehaviour // This script is related too player
                 hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down if gravity is normal
             }
             
-            bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
+            bool isGrounded = hit.collider != null; // If raycast hit's Ground layer object then is grounded, else not grounded.
             thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
             
+            if (isGrounded){
+                dashCounter = 1;
+                wallJumpCounter =0;
+            }
             if(isGrounded && doubleJumpAbility)
             {
                 canDoubleJump = true; // If the player is on the ground and has the double jump ability re-enable the ability
