@@ -175,12 +175,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa525549d3733c541a7cc7922641b9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ColliderEnemy1: {fileID: 3567238369422945281}
-  ColliderEnemy2: {fileID: 3567238369422945283}
+  ColliderEnemy: []
   bodyEnemy: {fileID: 3567238369422945310}
   enemyDamage: 1
   yKnockback: 4
   yCoordHeadStop: 0.5
   patrolTime: 2
   enemyWalkSpeed: 2
+  thisAnim: {fileID: 0}
   GemObject: {fileID: 6478585038978723470, guid: 42a783ba3182c4046b3b2e754ffb9aba, type: 3}
+  isDead: 0
+  alertEmote: {fileID: 5545477559524957957, guid: 827ec92bce31c664ba3d7146d2b34c5c, type: 3}
+  lostEmote: {fileID: 765983814140179549, guid: a9613ffc3da30434ba7e4cce8d155f15, type: 3}
