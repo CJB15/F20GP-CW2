@@ -8,7 +8,7 @@ public class player_camera : MonoBehaviour // This script handes the camera that
 
     public float x_coord_from_player = 0; // The distance of the camera from the player, on the x axis
     public float y_coord_from_player = 0.75f; // The distance of the camera from the player, on the y axis, set to 0 to remove camera jank when using anti/normal gravity pad
-    public float z_coord_from_player = -5; // The distance of the camera from the player, on the z axis
+    public float z_coord_from_player = -7; // The distance of the camera from the player, on the z axis
 
     // Update is called once per frame
     void FixedUpdate()
