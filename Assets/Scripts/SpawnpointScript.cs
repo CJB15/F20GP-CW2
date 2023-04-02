@@ -36,7 +36,7 @@ public class SpawnpointScript : MonoBehaviour
             sp.PointInactive();
         }
 
-        // Debug.Log(gameObject.name);
+        Debug.Log(gameObject.name);
 
         render.color = active;
     }
