@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class player_movment : MonoBehaviour // This script is related too player movment
 {
-    Rigidbody2D rb;
     public float player_speed = 4; // Player run speed
-    public float player_jump_height = 10; // Player jump height
+    public float player_jump_height = 6; // Player jump height
 
     public bool player_static = false; // Makes player unable to move, used in main menu
 
@@ -29,25 +28,6 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     bool isDead = false; // Is player Dead
 
-    public bool facingRight = true; // player direction
-
-
-    //dashing variables
-    public bool canDash = true;
-    public bool dashing;
-    public float dashForce = 2f;
-    public float dashTime = 0.4f;
-    // public float dashInteval = 0.5f; //time before next dash, replaced with dashCounter which is set to 1 every time the ground is touched
-    public int dashCounter;
-    public TrailRenderer tr;
-
-    //wall climbing variables
-    LayerMask wallLayer;
-    public bool sliding = false;
-
-    Player_attack pa;
-    public int wallJumpCounter = 0;
-    public bool wallJumping;
     bool isOnAntiGrav = false; // Is the player on the anti gravity pad
     bool isOnNormalGrav = false; // Is the player on the normal gravity pad
     bool gravityIsInverted = false; // Is the player's gravity current inverted
@@ -57,17 +37,20 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     bool holdingJump = false; // Is the user still holding the jump button after first jumping, this stops the double jump activating without pressing the button again
 
+    public float inputX;
+    public float inputY;
+
+    bool crouching = false;
+
     // Start is called before the first frame update
     void Start()
     {
         thisAnim = GetComponent<Animator>(); // Gets the animator
-        rb = GetComponent<Rigidbody2D>();
 
         ColliderPlayer = GetComponent<CapsuleCollider2D>(); // Gets the players collision box, capsule shape used as square collision corners cause issues with slopes.
         BodyPlayer = GetComponent<Rigidbody2D>(); // Gets players rigib body
         SpritePlayer = GetComponent<SpriteRenderer>(); // Gets players sprite
-        wallLayer = LayerMask.GetMask("Wall");
-        pa = GetComponent<Player_attack>();
+
         heightTestPlayer = ColliderPlayer.bounds.extents.y + 0.05f; // Gets the length of the raycast
         layerMaskGround = LayerMask.GetMask("Ground"); //  Ground objects are in the "Ground" layer, raycast looks for this
     }
@@ -75,27 +58,20 @@ public class player_movment : MonoBehaviour // This script is related too player
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(!isStunned && !isDead && !player_static && !dashing)
+        if(!isStunned && !isDead && !player_static)
         {
-            float inputX = Input.GetAxis("Horizontal"); // Gets users left or right input
-            float inputY = Input.GetAxis("Vertical"); // Gets users up or down input
+            inputX = Input.GetAxis("Horizontal"); // Gets users left or right input
+            inputY = Input.GetAxis("Vertical"); // Gets users up or down input
 
-            // if (dashing){
-            //     return;
-            // }
             if (inputX > 0) // If user gives right imput
             {
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
-                GetComponent<SpriteRenderer>().flipX = false; // Sprite is redered default, facing right
-                facingRight = true;  //sets facing right to true as the last input will direct the player to the right
                 SpritePlayer.flipX = false; // Sprite is redered default, facing right
             }
             else if (inputX < 0) // If user gives left imput
             {
                 //Debug.Log("Left");
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
-                GetComponent<SpriteRenderer>().flipX = true; // Sprite is redered mirrored, facing left
-                facingRight = false; //sets facing right to false as the last input will direct the player to the left
                 SpritePlayer.flipX = true; // Sprite is redered mirrored, facing left
             }
             else // If player not inputing either
@@ -104,7 +80,7 @@ public class player_movment : MonoBehaviour // This script is related too player
             }
 
             transform.Translate(((player_speed * inputX) * Time.deltaTime), 0, 0); // Convert user left/right input to left/right movment
-
+            
             if(gravityIsInverted)
             {
                 hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.up, heightTestPlayer, layerMaskGround); // Create a raycast pointing up if gravity is inverted
@@ -114,13 +90,9 @@ public class player_movment : MonoBehaviour // This script is related too player
                 hit = Physics2D.Raycast(ColliderPlayer.bounds.center, Vector2.down, heightTestPlayer, layerMaskGround); // Create a raycast pointing down if gravity is normal
             }
             
-            bool isGrounded = hit.collider != null; // If raycast hit's Ground layer object then is grounded, else not grounded.
+            bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
             thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
             
-            if (isGrounded){
-                dashCounter = 1;
-                wallJumpCounter =0;
-            }
             if(isGrounded && doubleJumpAbility)
             {
                 canDoubleJump = true; // If the player is on the ground and has the double jump ability re-enable the ability
@@ -208,81 +180,21 @@ public class player_movment : MonoBehaviour // This script is related too player
             if (inputY < 0) // If user presses down
             {
                 thisAnim.SetBool("Crouching", true); // Tell animator to use crouching animation
+                crouching = true;
             }
             else // If not
             {
                 thisAnim.SetBool("Crouching", false); // Tell animator to not use crouching animation
-            } // Note: this dose nothing gameplay-wise it's just to use one of teh animations
+                crouching = false;
+            }
 
             if (Input.GetKey("escape")) // Is esc button is pressed
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Return to main menu
             }
-
-
-            //dash code
-            if(Input.GetKeyDown(KeyCode.L) && canDash && !dashing && dashCounter>0)
-            {
-                StartCoroutine(playerDash());
-            }
-
-            //wall sliding code
-            if(touchedWall() && !isGrounded && inputX >= 0 && !wallJumping){
-                sliding = true;
-                wallJumpCounter =1;
-                rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -2, float.MaxValue));
-            }else if(touchedWall() && !isGrounded && inputX < 0 && !wallJumping){
-                sliding = true;
-                wallJumpCounter =1;
-                rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -2, float.MaxValue));
-            }else{
-                sliding = false;
-            }
-
-
-
-            //wall JumpCode
-            if(wallJumpCounter>0){
-                if(Input.GetButtonDown("Jump")){
-                    Debug.Log("Input x is: " + inputX);
-                    wallJumping = true;
-                    wallJumpCounter-=1;
-                    if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer)){
-                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
-                        Debug.Log("jumping left");
-                        rb.velocity = new Vector2(player_jump_height *-1, player_jump_height);
-                    }else if(Physics2D.OverlapCircle(pa.attackPointL.position, 0.5f,wallLayer)){
-                        Debug.Log("jumping right");
-                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
-                        rb.velocity = new Vector2(player_jump_height, player_jump_height);
-                    }
-                    Invoke(nameof(stopWallJump), 0.5f);
-                }
-            }
-
         }
     }
 
-    void stopWallJump(){
-        wallJumping = false;
-        rb.velocity = new Vector2(rb.velocity.x,rb.velocity.y);
-    }
-
-    bool touchedWall(){
-        if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer) 
-        ||
-        Physics2D.OverlapCircle(pa.attackPointL.position, 0.2f,wallLayer)){
-            if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer) ){
-                // Debug.Log("detect right");
-            }else if (Physics2D.OverlapCircle(pa.attackPointL.position, 0.2f,wallLayer)){
-                // Debug.Log("detect left");
-            }
-            return true;
-        }else{
-            return false;
-        }
-        
-    }
     public void playerKnockBack(int xAmount, int yAmount) // Can be called by other scripts to push players
     {
         Vector2 temp = BodyPlayer.velocity;
@@ -319,28 +231,6 @@ public class player_movment : MonoBehaviour // This script is related too player
         isStunned = false; // Set the flag to false
     }
 
-    IEnumerator playerDash(){
-        canDash = false;
-        dashing = true;
-        dashCounter -=1;
-        float initGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        if(facingRight){
-            rb.velocity  = new Vector2(transform.localScale.x * dashForce, 0f);
-        }else{
-            rb.velocity  = new Vector2((transform.localScale.x * -1.0f) * dashForce, 0f);
-        }
-        tr.emitting = true;
-        yield return new WaitForSeconds(dashTime);
-        tr.emitting = false;
-        rb.gravityScale = initGravity;
-        rb.velocity = new Vector2(0,0);
-        dashing = false;
-        // yield return new WaitForSeconds(dashInteval);
-        canDash = true;
-
-    }
-
     public void setDead() // Player is dead
     {
         thisAnim.SetBool("Dead", true);
@@ -363,5 +253,16 @@ public class player_movment : MonoBehaviour // This script is related too player
     public void normalGravPlatform(bool on_or_off)
     {
         isOnNormalGrav = on_or_off; // When player steps on normal grav pad, flag that
+    }
+
+    public void doubleJumpActive(bool active)
+    {
+        doubleJumpAbility = active;
+        canDoubleJump = active;
+    }
+
+    public bool getCrouching()
+    {
+        return crouching;
     }
 }

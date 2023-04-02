@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 7549964335308832596}
   - component: {fileID: 7549964335308832597}
   - component: {fileID: 7549964335308832594}
+  - component: {fileID: -8289312200921533687}
+  - component: {fileID: -5249507730964393585}
   m_Layer: 0
   m_Name: Player_Char
   m_TagString: Player
@@ -165,6 +167,9 @@ MonoBehaviour:
   player_static: 0
   movingCamera: {fileID: 3875968319466854831, guid: 88d476367be13ed49ba044cc11598034, type: 3}
   stunnedTime: 1
+  doubleJumpAbility: 0
+  inputX: 0
+  inputY: 0
 --- !u!114 &7549964335308832597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,11 +182,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044305b25d25cf8498eaa86db091a978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_max_health: 6
+  player_max_health: 3
   player_current_health: 0
   iFrameLength: 2
-  GodMode: 0
-  DemiGodMode: 0
   xKnockback: 3
   yKnockback: 4
   hpcounter: {fileID: 0}
@@ -201,3 +204,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gem_count: 0
+--- !u!114 &-8289312200921533687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7549964336058760930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06395d586135f3459fb742614cd2683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5249507730964393585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7549964336058760930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b43e181a007379641900935de9beb281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 8746309639296496880, guid: e3cf47343deeddc47997a3ad7b9468fc, type: 3}
+  rechargeTime: 1

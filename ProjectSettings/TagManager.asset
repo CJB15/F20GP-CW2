@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Health UI
   - Gem UI
+  - Tilemap
+  - Gem
+  - bullet
+  - PowerUp
+  - Power Up UI
   layers:
   - Default
   - TransparentFX
@@ -14,8 +19,8 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Enemy
-  - Wall
+  - 
+  - 
   - 
   - 
   - 
