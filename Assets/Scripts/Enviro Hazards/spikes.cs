@@ -20,7 +20,7 @@ public class spikes : MonoBehaviour
     {
         
         if (!collision.GetComponent<enemy>()){
-            
+            Debug.Log(collision.name);
         
         if (playerhp != null)
         {

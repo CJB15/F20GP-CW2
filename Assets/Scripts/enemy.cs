@@ -15,6 +15,7 @@ public class enemy : MonoBehaviour
     
     public int yKnockback = 4; // Amount the player is puched after jumping on the enemy
 
+
     public float yCoordHeadStop = 0.5f; // If the players origin is this much higher (greater y coord) than the enemy then the collision is ocunted as a head stomp
 
     public float patrolTime = 2; // How long each phase of the patrol cycle lasts for
@@ -186,6 +187,18 @@ public class enemy : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject); // Kill enemy
         GameObject newGem = Instantiate(GemObject, this.transform.position, this.transform.rotation); // Leave gem behind
+    }
+
+    public void damageEnemy(int damage, string direction) // Can be called to make player take any amount of damage
+    {
+        if(!isDead) // If not invulnerable, god mode or already dead, take damage
+        {
+           
+            StartCoroutine(enemyDead());
+            
+            
+            // Knock the play backwards
+        } // If invulenrable, godmode or dead do not take damage
     }
 
 }

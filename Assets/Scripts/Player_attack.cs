@@ -12,6 +12,8 @@ public class Player_attack : MonoBehaviour
     public LayerMask enemyLayers;
 
     player_movment playermove;
+    
+    public SpriteRenderer playerSprite;
 
     public float show;
 
@@ -21,17 +23,26 @@ public class Player_attack : MonoBehaviour
     void Start()
     {
         playermove = GameObject.FindGameObjectWithTag("Player").GetComponent<player_movment>(); // Used to call function in health_counter
+        playerSprite = GameObject.FindGameObjectWithTag("Player").GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
 
-        if(playermove.facingRight){
+
+        if (playerSprite.flipX==false){
             turn = false;
-        }else{
+        }
+        else{
             turn = true;
         }
+
+     //   if(playermove.facingRight){
+      //      turn = false;
+     //   }else{
+      //      turn = true;
+     //   }
 
         if(Input.GetKeyDown(KeyCode.J) && !turn ){
             AttackRight();
@@ -48,7 +59,10 @@ public class Player_attack : MonoBehaviour
         Debug.LogWarning("attacking right...");
         foreach(Collider2D enemy in enemiesHit){
             Debug.Log("Right hit " + enemy.name);
-            if(playermove.facingRight){
+          
+            if (playerSprite.flipX) {
+                
+          //  if(playermove.facingRight){
                 enemy.GetComponent<enemy>().damageEnemy(1,"Right");
             }
         }
@@ -59,7 +73,9 @@ public class Player_attack : MonoBehaviour
         Debug.LogWarning("attacking left...");
         foreach(Collider2D enemy in enemiesHit){
             Debug.Log("Left hit " + enemy.name);
-            if(!playermove.facingRight){
+     //     
+            if(playerSprite.flipX==false){
+ //         if(!playermove.facingRight){
                 enemy.GetComponent<enemy>().damageEnemy(1,"Left");
             }
         }
