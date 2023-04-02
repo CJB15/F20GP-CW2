@@ -347,6 +347,12 @@ public class player_movment : MonoBehaviour // This script is related too player
         isDead = true;
     }
 
+    public void setAlive() // Player is dead
+    {
+        thisAnim.SetBool("Dead", false);
+        isDead = false;
+    }
+
 
 
     public void antiGravPlatform(bool on_or_off)

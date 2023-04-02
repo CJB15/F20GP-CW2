@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class player_health : MonoBehaviour // This script holds the players health and function to reduce it
 {
-    public int player_max_health = 6; // Players Max health
+    public int player_max_health = 3; // Players Max health
     public int player_current_health; // Players current health
 
     bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
@@ -24,6 +24,12 @@ public class player_health : MonoBehaviour // This script holds the players heal
     public bool facingRight = true;
 
     bool isDead = false;
+
+
+
+    //spawnpoint fields
+    private Vector2 spawnpoint;
+    private Vector2 initSpawn;
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +57,11 @@ public class player_health : MonoBehaviour // This script holds the players heal
         {
             DemiGodMode = true;
         }
+
+
+        initSpawn = GameObject.FindGameObjectWithTag("Player").GetComponent<player_movment>().transform.position;
+        spawnpoint = initSpawn ;
+        Debug.Log("SpawnPoint: "+ spawnpoint);
     }
 
     // Update is called once per frame
@@ -106,7 +117,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
         } // If invulenrable, godmode or dead do not take damage
     }
 
-    IEnumerator iFrames()
+    public IEnumerator iFrames()
     {
         InvulnerabilityFrames = true; // Set the flag to true
         for(var i = 0 ; i < iFrameLength * 4 ; i++) // Loop for the set amount of time
@@ -125,6 +136,31 @@ public class player_health : MonoBehaviour // This script holds the players heal
         playermove.setDead(); // Calls function in player_movment, stops them moving
         yield return new WaitForSeconds(3);
         playergem.setGem(0); // Sets gemcount to 0
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Send the user back to the menu
+        changeSpawn(initSpawn);
+        reSpawn();
+        // UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Send the user back to the menu
+    }
+
+
+    public void reSpawn(){
+        // playerDamage(1, "Left");
+        if(isDead){
+            isDead = false;
+            playermove.setAlive();
+            player_current_health = player_max_health;
+            hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
+            PlayerPrefs.SetInt("player_current_health", player_current_health); // Updates the saved health value
+            transform.position = spawnpoint;
+        }
+        else{
+            transform.position = spawnpoint;
+        }
+
+
+    }
+    public void changeSpawn(Vector2 position)
+    {
+        spawnpoint = position;
+        Debug.Log("new Spawnpoint: "+spawnpoint);
     }
 }
