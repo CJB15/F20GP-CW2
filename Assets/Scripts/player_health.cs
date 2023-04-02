@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class player_health : MonoBehaviour // This script holds the players health and function to reduce it
 {
-    public int player_max_health = 6; // Players Max health
+    public int player_max_health = 3; // Players Max health
     public int player_current_health; // Players current health
 
     bool InvulnerabilityFrames = false; // Is the player temporarly invulenrable after taking damage
@@ -145,7 +145,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
     public void reSpawn(){
         // playerDamage(1, "Left");
         if(isDead){
-
+            isDead = false;
             playermove.setAlive();
             player_current_health = player_max_health;
             hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health

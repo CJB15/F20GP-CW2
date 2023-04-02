@@ -18,7 +18,6 @@ public class out_of_bounds : MonoBehaviour // This script is the functions for t
             player_health playerHp = coll.GetComponent<player_health>();
             if(playerHp.player_current_health <= 0){
                 playerHp.playerDamage(1,"Left");
-                return;
             }
             else{
                 playerHp.player_current_health -=1;
