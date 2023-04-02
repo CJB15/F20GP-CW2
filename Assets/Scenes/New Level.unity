@@ -3315,6 +3315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spawnpoint
       objectReference: {fileID: 0}
+    - target: {fileID: 5555926774782985744, guid: 65ccccbcae1c33d4ba78b8398eb82cf1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5555926774782985745, guid: 65ccccbcae1c33d4ba78b8398eb82cf1, type: 3}
       propertyPath: m_RootOrder
       value: 26
