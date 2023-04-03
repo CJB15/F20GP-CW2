@@ -19,7 +19,7 @@ public class spikes : MonoBehaviour
       public void OnTriggerEnter2D(Collider2D collision)
     {
         
-        if (!collision.GetComponent<enemy>()){
+        if (!collision.GetComponent<enemy>() && !collision.GetComponent<Bullet>()){
             Debug.Log(collision.name);
         
         if (playerhp != null)

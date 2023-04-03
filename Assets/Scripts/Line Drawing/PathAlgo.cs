@@ -59,9 +59,9 @@ public class PathAlgo : MonoBehaviour
         if(ifPressed){        
         /* If statements used to determine what the pathfinding is looking for in terms of a goal position, whether it be to the packages on the map,
          * or the customers (destination for package). */
-        if(GameObject.FindGameObjectWithTag("Gem"))
+        if(GameObject.FindGameObjectWithTag("End"))
         {
-            followPoint = GameObject.FindGameObjectWithTag("Gem");
+            followPoint = GameObject.FindGameObjectWithTag("End");
 
         }
        // else
