@@ -177,6 +177,7 @@ public class player_movment : MonoBehaviour // This script is related too player
                 canDoubleJump = false; // Set the player to not be able to double jump
                 isJumping = true; // Sets the player to be jumping again
                 thisAnim.SetBool("Jumping", true); // Play jumping anaimation
+                holdingJump = true;
                 
                 if (gravityIsInverted)
                 {
@@ -217,20 +218,23 @@ public class player_movment : MonoBehaviour // This script is related too player
             }
 
             //dash code
-            if(Input.GetKeyDown(KeyCode.L) && canDash && !dashing && dashCounter>0)
+            if(Input.GetKey(KeyCode.L) && canDash && !dashing && dashCounter>0)
             {
                 StartCoroutine(playerDash());
             }
 
             //wall sliding code
-            if(touchedWall() && !isGrounded && inputX >= 0 && !wallJumping){
+            if(touchedWall() && !isGrounded && inputX != 0 && !wallJumping){
                 sliding = true;
                 wallJumpCounter =1;
-                BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, -2, float.MaxValue));
-            }else if(touchedWall() && !isGrounded && inputX < 0 && !wallJumping){
-                sliding = true;
-                wallJumpCounter =1;
-                BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, -2, float.MaxValue));
+                if(!gravityIsInverted)
+                {
+                    BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, -2, float.MaxValue));
+                }
+                else
+                {
+                    BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, float.MinValue, +2));
+                }
             }else{
                 sliding = false;
             }
@@ -239,18 +243,33 @@ public class player_movment : MonoBehaviour // This script is related too player
 
             //wall JumpCode
             if(wallJumpCounter>0){
-                if(Input.GetButtonDown("Jump")){
+                if(Input.GetButton("Jump") && !holdingJump){
                     Debug.Log("Input x is: " + inputX);
                     wallJumping = true;
                     wallJumpCounter-=1;
+                    holdingJump = true;
+                    isJumping = true; // Sets the player to be jumping again
+                    thisAnim.SetBool("Jumping", true); // Play jumping anaimation
                     if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer)){
-                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
+                        if(!gravityIsInverted)
+                        {
+                            BodyPlayer.velocity = new Vector2(player_jump_height *-1, player_jump_height);
+                        }
+                        else
+                        {
+                            BodyPlayer.velocity = new Vector2(player_jump_height *-1, -player_jump_height);
+                        }
                         Debug.Log("jumping left");
-                        BodyPlayer.velocity = new Vector2(player_jump_height *-1, player_jump_height);
                     }else if(Physics2D.OverlapCircle(pa.attackPointL.position, 0.5f,wallLayer)){
+                        if(!gravityIsInverted)
+                        {
+                            BodyPlayer.velocity = new Vector2(player_jump_height, player_jump_height);
+                        }
+                        else
+                        {
+                            BodyPlayer.velocity = new Vector2(player_jump_height, -player_jump_height);
+                        }
                         Debug.Log("jumping right");
-                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
-                        BodyPlayer.velocity = new Vector2(player_jump_height, player_jump_height);
                     }
                     Invoke(nameof(stopWallJump), 0.5f);
                 }
