@@ -189,7 +189,7 @@ public class enemy : MonoBehaviour
         GameObject newGem = Instantiate(GemObject, this.transform.position, this.transform.rotation); // Leave gem behind
     }
 
-    public void damageEnemy(int damage, string direction) // Can be called to make player take any amount of damage
+    public void damageEnemy(int damage) // Can be called to make player take any amount of damage
     {
         if(!isDead) // If not invulnerable, god mode or already dead, take damage
         {

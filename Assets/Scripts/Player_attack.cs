@@ -38,12 +38,6 @@ public class Player_attack : MonoBehaviour
             turn = true;
         }
 
-     //   if(playermove.facingRight){
-      //      turn = false;
-     //   }else{
-      //      turn = true;
-     //   }
-
         if(Input.GetKeyDown(KeyCode.J) && !turn ){
             AttackRight();
         }
@@ -60,10 +54,10 @@ public class Player_attack : MonoBehaviour
         foreach(Collider2D enemy in enemiesHit){
             Debug.Log("Right hit " + enemy.name);
           
-            if (playerSprite.flipX) {
+            // if (playerSprite.flipX) {
                 
-          //  if(playermove.facingRight){
-                enemy.GetComponent<enemy>().damageEnemy(1,"Right");
+           if(playermove.facingRight){
+                enemy.GetComponent<enemy>().damageEnemy(1);
             }
         }
     }
@@ -72,23 +66,22 @@ public class Player_attack : MonoBehaviour
         Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPointL.position, attackRange,enemyLayers);
         Debug.LogWarning("attacking left...");
         foreach(Collider2D enemy in enemiesHit){
-            Debug.Log("Left hit " + enemy.name);
-     //     
-            if(playerSprite.flipX==false){
- //         if(!playermove.facingRight){
-                enemy.GetComponent<enemy>().damageEnemy(1,"Left");
+            Debug.Log("Left hit " + enemy.name);  
+            // if(playerSprite.flipX==false){
+         if(!playermove.facingRight){
+                enemy.GetComponent<enemy>().damageEnemy(1);
             }
         }
     }
-    // void OnDrawGizmosSelected(){
-    //     if(attackPointL == null){
-    //         return;
-    //     }
-    //     Gizmos.DrawWireSphere(attackPointL.position, attackRange);
-    //     if(attackPointR == null){
-    //         return;
-    //     }
-    //     Gizmos.DrawWireSphere(attackPointR.position, attackRange);
-    // }
+    void OnDrawGizmosSelected(){
+        if(attackPointL == null){
+            return;
+        }
+        Gizmos.DrawWireSphere(attackPointL.position, attackRange);
+        if(attackPointR == null){
+            return;
+        }
+        Gizmos.DrawWireSphere(attackPointR.position, attackRange);
+    }
 
 }
