@@ -145,7 +145,7 @@ public class player_health : MonoBehaviour // This script holds the players heal
     public void reSpawn(){
         // playerDamage(1, "Left");
         if(isDead){
-
+            isDead = false;
             playermove.setAlive();
             player_current_health = player_max_health;
             hpcounter.updateHealthCount(player_current_health, player_max_health);  // Calls function in health_counter, sets the health display to show current health
