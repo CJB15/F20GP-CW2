@@ -8,11 +8,10 @@ public class BackgroundScript : MonoBehaviour
     // BoxCollider2D col;
     public int counter = 0;
     // public int highestScreen = 0;
-    public Vector3 pos;
-    public List<Vector3> posList;
+    public Vector2 pos;
+    public List<Vector2> posList;
     public float backgroundwidth;
     public float offset;
-    public float zAxis = 4;
 
     GameObject player;
     public bool tried = false;
@@ -45,8 +44,8 @@ public class BackgroundScript : MonoBehaviour
             if(counter>posList.Count){
                 // highestScreen++;
                 Debug.Log(pos.x + "new position");
-                Vector3 newBackgroundPos = new Vector3(
-                    ((pos.x) + (backgroundwidth/2)), pos.y, zAxis);
+                Vector2 newBackgroundPos = new Vector2(
+                    ((pos.x) + (backgroundwidth/2)), pos.y );
 
 
                 pos = newBackgroundPos;
@@ -54,8 +53,8 @@ public class BackgroundScript : MonoBehaviour
                 posList.Add(pos); //add current position to previous counter index
             }
             else{
-                Vector3 newBackgroundPos = new Vector3(
-                    ((pos.x) + (backgroundwidth/2)), pos.y, zAxis);
+                Vector2 newBackgroundPos = new Vector2(
+                    ((pos.x) + (backgroundwidth/2)), pos.y );
 
                 pos = newBackgroundPos;
                 transform.position = pos;
@@ -64,8 +63,9 @@ public class BackgroundScript : MonoBehaviour
         }
         else if(playerPos.x - offset < (pos.x -backgroundwidth/2)){
             counter--;
-            Vector3 newBackgroundPos = new Vector3(
-                ((pos.x) - (backgroundwidth/2)), pos.y, zAxis);
+            Vector2 newBackgroundPos = new Vector2(
+                ((pos.x) - (backgroundwidth/2)), pos.y );
+            pos = newBackgroundPos;
             transform.position = pos;
         }
         
