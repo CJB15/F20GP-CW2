@@ -28,6 +28,26 @@ public class player_movment : MonoBehaviour // This script is related too player
 
     bool isDead = false; // Is player Dead
 
+    public bool facingRight = true; // player direction
+
+
+    //dashing variables
+    public bool canDash = true;
+    public bool dashing;
+    public float dashForce = 2f;
+    public float dashTime = 0.4f;
+    // public float dashInteval = 0.5f; //time before next dash, replaced with dashCounter which is set to 1 every time the ground is touched
+    public int dashCounter;
+    public TrailRenderer tr;
+
+    //wall climbing variables
+    LayerMask wallLayer;
+    public bool sliding = false;
+
+    Player_attack pa;
+    public int wallJumpCounter = 0;
+    public bool wallJumping;
+    
     bool isOnAntiGrav = false; // Is the player on the anti gravity pad
     bool isOnNormalGrav = false; // Is the player on the normal gravity pad
     bool gravityIsInverted = false; // Is the player's gravity current inverted
@@ -50,7 +70,8 @@ public class player_movment : MonoBehaviour // This script is related too player
         ColliderPlayer = GetComponent<CapsuleCollider2D>(); // Gets the players collision box, capsule shape used as square collision corners cause issues with slopes.
         BodyPlayer = GetComponent<Rigidbody2D>(); // Gets players rigib body
         SpritePlayer = GetComponent<SpriteRenderer>(); // Gets players sprite
-
+        wallLayer = LayerMask.GetMask("Wall");
+        pa = GetComponent<Player_attack>();
         heightTestPlayer = ColliderPlayer.bounds.extents.y + 0.05f; // Gets the length of the raycast
         layerMaskGround = LayerMask.GetMask("Ground"); //  Ground objects are in the "Ground" layer, raycast looks for this
     }
@@ -67,12 +88,15 @@ public class player_movment : MonoBehaviour // This script is related too player
             {
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
                 SpritePlayer.flipX = false; // Sprite is redered default, facing right
+                facingRight = true;
             }
             else if (inputX < 0) // If user gives left imput
             {
                 //Debug.Log("Left");
                 thisAnim.SetBool("Moving", true); // Enable player to moving animation
                 SpritePlayer.flipX = true; // Sprite is redered mirrored, facing left
+                facingRight = false;
+                
             }
             else // If player not inputing either
             {
@@ -93,6 +117,10 @@ public class player_movment : MonoBehaviour // This script is related too player
             bool isGrounded = (hit.collider != null); // If raycast hit's Ground layer object then is grounded, else not grounded.
             thisAnim.SetBool("Grounded", isGrounded); // If not grounded tells animtor to use falling animation, else use grounded animations
             
+            if (isGrounded){
+                dashCounter = 1;
+                wallJumpCounter =0;
+            }
             if(isGrounded && doubleJumpAbility)
             {
                 canDoubleJump = true; // If the player is on the ground and has the double jump ability re-enable the ability
@@ -188,11 +216,71 @@ public class player_movment : MonoBehaviour // This script is related too player
                 crouching = false;
             }
 
+            //dash code
+            if(Input.GetKeyDown(KeyCode.L) && canDash && !dashing && dashCounter>0)
+            {
+                StartCoroutine(playerDash());
+            }
+
+            //wall sliding code
+            if(touchedWall() && !isGrounded && inputX >= 0 && !wallJumping){
+                sliding = true;
+                wallJumpCounter =1;
+                BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, -2, float.MaxValue));
+            }else if(touchedWall() && !isGrounded && inputX < 0 && !wallJumping){
+                sliding = true;
+                wallJumpCounter =1;
+                BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x, Mathf.Clamp(BodyPlayer.velocity.y, -2, float.MaxValue));
+            }else{
+                sliding = false;
+            }
+
+
+
+            //wall JumpCode
+            if(wallJumpCounter>0){
+                if(Input.GetButtonDown("Jump")){
+                    Debug.Log("Input x is: " + inputX);
+                    wallJumping = true;
+                    wallJumpCounter-=1;
+                    if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer)){
+                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
+                        Debug.Log("jumping left");
+                        BodyPlayer.velocity = new Vector2(player_jump_height *-1, player_jump_height);
+                    }else if(Physics2D.OverlapCircle(pa.attackPointL.position, 0.5f,wallLayer)){
+                        Debug.Log("jumping right");
+                        // rb.AddForce(new Vector2(5f, player_jump_height), ForceMode2D.Impulse);
+                        BodyPlayer.velocity = new Vector2(player_jump_height, player_jump_height);
+                    }
+                    Invoke(nameof(stopWallJump), 0.5f);
+                }
+            }
+
             if (Input.GetKey("escape")) // Is esc button is pressed
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("Main Menu"); // Return to main menu
             }
         }
+    }
+    void stopWallJump(){
+        wallJumping = false;
+        BodyPlayer.velocity = new Vector2(BodyPlayer.velocity.x,BodyPlayer.velocity.y);
+    }
+
+    bool touchedWall(){
+        if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer) 
+        ||
+        Physics2D.OverlapCircle(pa.attackPointL.position, 0.2f,wallLayer)){
+            if(Physics2D.OverlapCircle(pa.attackPointR.position, 0.5f,wallLayer) ){
+                // Debug.Log("detect right");
+            }else if (Physics2D.OverlapCircle(pa.attackPointL.position, 0.2f,wallLayer)){
+                // Debug.Log("detect left");
+            }
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
     public void playerKnockBack(int xAmount, int yAmount) // Can be called by other scripts to push players
@@ -229,6 +317,27 @@ public class player_movment : MonoBehaviour // This script is related too player
         yield return new WaitForSeconds(stunnedTime);
         thisAnim.SetBool("Stunned", false);
         isStunned = false; // Set the flag to false
+    }
+    IEnumerator playerDash(){
+        canDash = false;
+        dashing = true;
+        dashCounter -=1;
+        float initGravity = BodyPlayer.gravityScale;
+        BodyPlayer.gravityScale = 0f;
+        if(facingRight){
+            BodyPlayer.velocity  = new Vector2(transform.localScale.x * dashForce, 0f);
+        }else{
+            BodyPlayer.velocity  = new Vector2((transform.localScale.x * -1.0f) * dashForce, 0f);
+        }
+        tr.emitting = true;
+        yield return new WaitForSeconds(dashTime);
+        tr.emitting = false;
+        BodyPlayer.gravityScale = initGravity;
+        BodyPlayer.velocity = new Vector2(0,0);
+        dashing = false;
+        // yield return new WaitForSeconds(dashInteval);
+        canDash = true;
+
     }
 
     public void setDead() // Player is dead
