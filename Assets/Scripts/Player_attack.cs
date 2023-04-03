@@ -38,10 +38,10 @@ public class Player_attack : MonoBehaviour
             turn = true;
         }
 
-        if(Input.GetKeyDown(KeyCode.J) && !turn ){
+        if(Input.GetKey(KeyCode.J) && !turn ){
             AttackRight();
         }
-        else if(Input.GetKeyDown(KeyCode.J) && turn){
+        else if(Input.GetKey(KeyCode.J) && turn){
             
             AttackLeft();
         }  

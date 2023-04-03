@@ -121,6 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3d293cf76056a74d9cf6395be7e12f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spikeDMG: 2
+  spikeDMG: 1
   playerhp: {fileID: 0}
   playermove: {fileID: 0}
