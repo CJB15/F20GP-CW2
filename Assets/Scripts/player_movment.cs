@@ -350,6 +350,14 @@ public class player_movment : MonoBehaviour // This script is related too player
     {
         thisAnim.SetBool("Dead", false);
         isDead = false;
+
+        if(gravityIsInverted)
+        {
+            BodyPlayer.gravityScale = 1; // set gravity to normal
+            transform.Rotate(180.0f, 0.0f, 0.0f, Space.World); // flip player
+            gravityIsInverted = false; // flag that gravity is not inverted
+            movingCamera.cameraGravitySwitch(); // Flip camera position on the y axis
+        }
     }
 
 
